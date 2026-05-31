@@ -1,0 +1,36 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "SAM x Nano4M"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Overview
+      - href: results.qmd
+        text: Results
+      - href: method.qmd
+        text: Method
+      - href: report.qmd
+        text: Report
+    right:
+      - icon: github
+        href: https://github.com/ldiongue/sam-nano4m-site
+  page-footer:
+    left: "COM-304 Final Project — Laïne Diongue, Nicola Rauseo, Shabnam Tajik"
+    right: "Built with Quarto for GitHub Pages"
+
+format:
+  html:
+    theme:
+      light: cosmo
+      dark: darkly
+    css: styles.css
+    toc: true
+    smooth-scroll: true
+    code-copy: true
+    anchor-sections: true
+
+execute:
+  freeze: auto

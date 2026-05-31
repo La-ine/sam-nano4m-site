@@ -1,0 +1,163 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Overview",
+    "section": "",
+    "text": "A COM-304 project extending nano4M with SAM segmentation tokens as a fifth modality. The project asks a simple question: can a compact multimodal model learn segmentation tokens jointly with RGB, depth, normals, and text in a unified masked modeling framework?"
+  },
+  {
+    "objectID": "index.html#key-takeaways",
+    "href": "index.html#key-takeaways",
+    "title": "Overview",
+    "section": "Key takeaways",
+    "text": "Key takeaways\n\nSAM tokens can be integrated into nano4M without changing the core model architecture.\nThe model is trained from scratch, not warm-started from a previous checkpoint.\nThe “offset” in this project refers to the token index range in the data representation, not offset training.\nSAM reaches competitive loss relative to the other visual modalities on synthetic CLEVR scenes."
+  },
+  {
+    "objectID": "index.html#what-was-added",
+    "href": "index.html#what-was-added",
+    "title": "Overview",
+    "section": "What was added",
+    "text": "What was added\nThe extension adds a SAM-based segmentation modality to the existing multiCLEVR pipeline. RGB scenes are pseudo-labeled with SAM 2.1, converted into instance masks, normalized into fixed-length token sequences, and loaded alongside the original modalities."
+  },
+  {
+    "objectID": "index.html#why-the-offset-matters",
+    "href": "index.html#why-the-offset-matters",
+    "title": "Overview",
+    "section": "Why the offset matters",
+    "text": "Why the offset matters\nThe SAM-related “offset” is purely a data indexing convention: SAM token IDs are assigned a dedicated range so they do not collide with other modality vocabularies. It does not mean the model was offset-trained or fine-tuned from an already converged checkpoint."
+  },
+  {
+    "objectID": "index.html#what-this-website-shows",
+    "href": "index.html#what-this-website-shows",
+    "title": "Overview",
+    "section": "What this website shows",
+    "text": "What this website shows\nThis site complements the report with a shorter narrative, result snapshots, and a clearer explanation of what the extension adds to nano4M. It is designed to be self-contained, so a reader can understand the high-level idea without opening the PDF first."
+  },
+  {
+    "objectID": "results.html",
+    "href": "results.html",
+    "title": "Results",
+    "section": "",
+    "text": "The final validation losses reported in the project are shown below.\n\n\n\nModality\nValidation CE\nComment\n\n\n\n\nscene_desc\n0.30\nLow-entropy text target\n\n\ntok_sam@256\n1.65\nCompetitive among visual modalities\n\n\ntok_normal@256\n4.12\nHarder structured visual prediction\n\n\ntok_depth@256\n4.26\nHarder structured visual prediction\n\n\ntok_rgb@256\n5.93\nHighest complexity among targets"
+  },
+  {
+    "objectID": "results.html#quantitative-summary",
+    "href": "results.html#quantitative-summary",
+    "title": "Results",
+    "section": "",
+    "text": "The final validation losses reported in the project are shown below.\n\n\n\nModality\nValidation CE\nComment\n\n\n\n\nscene_desc\n0.30\nLow-entropy text target\n\n\ntok_sam@256\n1.65\nCompetitive among visual modalities\n\n\ntok_normal@256\n4.12\nHarder structured visual prediction\n\n\ntok_depth@256\n4.26\nHarder structured visual prediction\n\n\ntok_rgb@256\n5.93\nHighest complexity among targets"
+  },
+  {
+    "objectID": "results.html#interpretation",
+    "href": "results.html#interpretation",
+    "title": "Results",
+    "section": "Interpretation",
+    "text": "Interpretation\nSAM achieves lower CE than the other visual token modalities in this setup. On synthetic CLEVR scenes, this is plausible because segmentation masks are structurally simpler than RGB texture fields or continuous geometric signals.\n\nThe main correction to keep in mind is conceptual: the project used training from scratch. The word “offset” refers to the token index range used for SAM data, such as coordinates or token IDs living in a shifted interval, rather than a warm-start or offset-training regime."
+  },
+  {
+    "objectID": "results.html#qualitative-presentation-ideas",
+    "href": "results.html#qualitative-presentation-ideas",
+    "title": "Results",
+    "section": "Qualitative presentation ideas",
+    "text": "Qualitative presentation ideas\nFor the final published version, this page is a good place to add:\n\nA side-by-side RGB image and generated SAM result.\nA short reconstruction chain, for example RGB → depth → SAM.\nA compact failure-case gallery showing boundary errors or missed instances."
+  },
+  {
+    "objectID": "results.html#suggested-figures",
+    "href": "results.html#suggested-figures",
+    "title": "Results",
+    "section": "Suggested figures",
+    "text": "Suggested figures\nPlace your best visual examples here using Quarto image blocks, for example:\n![](images/rgb_image1.png){fig-alt=\"RGB input scene\" width=\"48%\"}\n![](images/generated_sam1.png){fig-alt=\"Generated SAM segmentation\" width=\"48%\"}"
+  },
+  {
+    "objectID": "method.html",
+    "href": "method.html",
+    "title": "Method",
+    "section": "",
+    "text": "The project extends multiCLEVR with SAM-derived instance segmentation tokens. Each RGB scene is pseudo-labeled with SAM 2.1, filtered for stable masks, converted to normalized mask crops, and then tokenized with the pretrained 4M SAM tokenizer."
+  },
+  {
+    "objectID": "method.html#pipeline",
+    "href": "method.html#pipeline",
+    "title": "Method",
+    "section": "",
+    "text": "The project extends multiCLEVR with SAM-derived instance segmentation tokens. Each RGB scene is pseudo-labeled with SAM 2.1, filtered for stable masks, converted to normalized mask crops, and then tokenized with the pretrained 4M SAM tokenizer."
+  },
+  {
+    "objectID": "method.html#tokenization",
+    "href": "method.html#tokenization",
+    "title": "Method",
+    "section": "Tokenization",
+    "text": "Tokenization\nEach segmentation instance is represented with coordinates, bounding-box information, and mask tokens. To avoid collisions with the vocabularies used by the other modalities, SAM token IDs are stored in a dedicated offset range."
+  },
+  {
+    "objectID": "method.html#important-clarification",
+    "href": "method.html#important-clarification",
+    "title": "Method",
+    "section": "Important clarification",
+    "text": "Important clarification\nThis offset is a data representation choice. It does not imply offset training, checkpoint continuation, or warm-starting from a previously trained 4-modality model."
+  },
+  {
+    "objectID": "method.html#training-setup",
+    "href": "method.html#training-setup",
+    "title": "Method",
+    "section": "Training setup",
+    "text": "Training setup\nThe reported 5-modality model is trained jointly from scratch. All encoder and decoder parameters are initialized together, and SAM is treated as an additional masked prediction target within the same multimodal framework."
+  },
+  {
+    "objectID": "method.html#dataset-structure",
+    "href": "method.html#dataset-structure",
+    "title": "Method",
+    "section": "Dataset structure",
+    "text": "Dataset structure\n\n50,000 training scenes.\n5,000 validation scenes.\n10 augmentations per scene.\nOne aligned file per modality per sample."
+  },
+  {
+    "objectID": "method.html#what-to-add-before-submission",
+    "href": "method.html#what-to-add-before-submission",
+    "title": "Method",
+    "section": "What to add before submission",
+    "text": "What to add before submission\nYou can enrich this page with:\n\nA figure of the labeling/tokenization pipeline.\nA compact diagram of the architecture.\nA short explanation of padding, truncation, and sequence length choices."
+  },
+  {
+    "objectID": "report.html",
+    "href": "report.html",
+    "title": "Report and submission",
+    "section": "",
+    "text": "The course asks for a website in addition to the report, so this Quarto project is set up to serve as the publishable companion site. It should summarize the project, show the best examples, and explain what the extension enables beyond the written report."
+  },
+  {
+    "objectID": "report.html#what-this-site-is-for",
+    "href": "report.html#what-this-site-is-for",
+    "title": "Report and submission",
+    "section": "",
+    "text": "The course asks for a website in addition to the report, so this Quarto project is set up to serve as the publishable companion site. It should summarize the project, show the best examples, and explain what the extension enables beyond the written report."
+  },
+  {
+    "objectID": "report.html#how-to-include-the-report",
+    "href": "report.html#how-to-include-the-report",
+    "title": "Report and submission",
+    "section": "How to include the report",
+    "text": "How to include the report\nYou have two simple options:\n\nOption 1 — Link the PDF\nPlace your final report PDF in the project root or in docs/, then link it here:\n[Download the final report](docs/SAM_x_Nano4M_report.pdf)\n\n\nOption 2 — Embed selected figures only\nIf the PDF itself is submitted separately, keep this page lightweight and use it to:\n\nRestate the abstract in shorter form.\nLink to the GitHub repository.\nLink to the course deliverables.\nPoint readers to the best result pages."
+  },
+  {
+    "objectID": "report.html#github-pages-workflow",
+    "href": "report.html#github-pages-workflow",
+    "title": "Report and submission",
+    "section": "GitHub Pages workflow",
+    "text": "GitHub Pages workflow\n\nCreate a GitHub repository.\nPush this Quarto project.\nRun quarto render locally.\nCommit the generated docs/ folder.\nIn GitHub, enable Pages from the docs/ folder on the main branch."
+  },
+  {
+    "objectID": "report.html#recommended-repository-structure",
+    "href": "report.html#recommended-repository-structure",
+    "title": "Report and submission",
+    "section": "Recommended repository structure",
+    "text": "Recommended repository structure\nsam-nano4m-site/\n├── _quarto.yml\n├── index.qmd\n├── results.qmd\n├── method.qmd\n├── report.qmd\n├── styles.css\n├── images/\n└── docs/"
+  },
+  {
+    "objectID": "report.html#final-checklist",
+    "href": "report.html#final-checklist",
+    "title": "Report and submission",
+    "section": "Final checklist",
+    "text": "Final checklist\n\nAdd your real figures and captions.\nReplace placeholder repository links.\nKeep total text roughly comparable to the 4-page report.\nMake sure the last visible commit is before the deadline."
+  }
+]

@@ -1,0 +1,57 @@
+---
+title: "Report and submission"
+---
+
+## What this site is for
+
+The course asks for a website in addition to the report, so this Quarto project is set up to serve as the publishable companion site. It should summarize the project, show the best examples, and explain what the extension enables beyond the written report.
+
+## How to include the report
+
+You have two simple options:
+
+### Option 1 — Link the PDF
+
+Place your final report PDF in the project root or in `docs/`, then link it here:
+
+```markdown
+[Download the final report](docs/SAM_x_Nano4M_report.pdf)
+```
+
+### Option 2 — Embed selected figures only
+
+If the PDF itself is submitted separately, keep this page lightweight and use it to:
+
+- Restate the abstract in shorter form.
+- Link to the GitHub repository.
+- Link to the course deliverables.
+- Point readers to the best result pages.
+
+## GitHub Pages workflow
+
+1. Create a GitHub repository.
+2. Push this Quarto project.
+3. Run `quarto render` locally.
+4. Commit the generated `docs/` folder.
+5. In GitHub, enable Pages from the `docs/` folder on the main branch.
+
+## Recommended repository structure
+
+```text
+sam-nano4m-site/
+├── _quarto.yml
+├── index.qmd
+├── results.qmd
+├── method.qmd
+├── report.qmd
+├── styles.css
+├── images/
+└── docs/
+```
+
+## Final checklist
+
+- Add your real figures and captions.
+- Replace placeholder repository links.
+- Keep total text roughly comparable to the 4-page report.
+- Make sure the last visible commit is before the deadline.
