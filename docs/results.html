@@ -23,41 +23,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -313,7 +278,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/your-username/sam-nano4m-site"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/ldiongue/sam-nano4m-site"> <i class="bi bi-github" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -334,10 +299,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#quantitative-summary" id="toc-quantitative-summary" class="nav-link active" data-scroll-target="#quantitative-summary">Quantitative summary</a></li>
+  <li><a href="#training-results" id="toc-training-results" class="nav-link active" data-scroll-target="#training-results">Training results</a></li>
+  <li><a href="#quantitative-results" id="toc-quantitative-results" class="nav-link" data-scroll-target="#quantitative-results">Quantitative results</a></li>
   <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation">Interpretation</a></li>
-  <li><a href="#qualitative-presentation-ideas" id="toc-qualitative-presentation-ideas" class="nav-link" data-scroll-target="#qualitative-presentation-ideas">Qualitative presentation ideas</a></li>
-  <li><a href="#suggested-figures" id="toc-suggested-figures" class="nav-link" data-scroll-target="#suggested-figures">Suggested figures</a></li>
   </ul>
 </nav>
     </div>
@@ -364,8 +328,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="quantitative-summary" class="level2">
-<h2 class="anchored" data-anchor-id="quantitative-summary">Quantitative summary</h2>
+<section id="training-results" class="level2">
+<h2 class="anchored" data-anchor-id="training-results">Training results</h2>
 <p>The final validation losses reported in the project are shown below.</p>
 <table class="caption-top table">
 <thead>
@@ -404,27 +368,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 </section>
+<section id="quantitative-results" class="level2">
+<h2 class="anchored" data-anchor-id="quantitative-results">Quantitative results</h2>
+<p><img src="images/quantitative_results1.png" class="img-fluid" style="width:60.0%" alt="Comparison of rgb image, ground truth for SAM and generated SAM masks"></p>
+<p>Figure: Examples of generated masks. First row: original cropped RGB image. Second row: SAMv2.1 Small AMG masked image. Third row, model-generated SAM masks</p>
+</section>
 <section id="interpretation" class="level2">
 <h2 class="anchored" data-anchor-id="interpretation">Interpretation</h2>
 <p>SAM achieves lower CE than the other visual token modalities in this setup. On synthetic CLEVR scenes, this is plausible because segmentation masks are structurally simpler than RGB texture fields or continuous geometric signals.</p>
-<div class="callout-soft">
-<p>The main correction to keep in mind is conceptual: the project used <strong>training from scratch</strong>. The word “offset” refers to the token index range used for SAM data, such as coordinates or token IDs living in a shifted interval, rather than a warm-start or offset-training regime.</p>
-</div>
-</section>
-<section id="qualitative-presentation-ideas" class="level2">
-<h2 class="anchored" data-anchor-id="qualitative-presentation-ideas">Qualitative presentation ideas</h2>
-<p>For the final published version, this page is a good place to add:</p>
-<ul>
-<li>A side-by-side RGB image and generated SAM result.</li>
-<li>A short reconstruction chain, for example RGB → depth → SAM.</li>
-<li>A compact failure-case gallery showing boundary errors or missed instances.</li>
-</ul>
-</section>
-<section id="suggested-figures" class="level2">
-<h2 class="anchored" data-anchor-id="suggested-figures">Suggested figures</h2>
-<p>Place your best visual examples here using Quarto image blocks, for example:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/rgb_image1.png)</span>{fig-alt="RGB input scene" width="48%"}</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/generated_sam1.png)</span>{fig-alt="Generated SAM segmentation" width="48%"}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 
 </section>

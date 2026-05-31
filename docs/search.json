@@ -53,14 +53,14 @@
     "href": "results.html#interpretation",
     "title": "Results",
     "section": "Interpretation",
-    "text": "Interpretation\nSAM achieves lower CE than the other visual token modalities in this setup. On synthetic CLEVR scenes, this is plausible because segmentation masks are structurally simpler than RGB texture fields or continuous geometric signals.\n\nThe main correction to keep in mind is conceptual: the project used training from scratch. The word “offset” refers to the token index range used for SAM data, such as coordinates or token IDs living in a shifted interval, rather than a warm-start or offset-training regime."
+    "text": "Interpretation\nSAM achieves lower CE than the other visual token modalities in this setup. On synthetic CLEVR scenes, this is plausible because segmentation masks are structurally simpler than RGB texture fields or continuous geometric signals."
   },
   {
     "objectID": "results.html#qualitative-presentation-ideas",
     "href": "results.html#qualitative-presentation-ideas",
     "title": "Results",
     "section": "Qualitative presentation ideas",
-    "text": "Qualitative presentation ideas\nFor the final published version, this page is a good place to add:\n\nA side-by-side RGB image and generated SAM result.\nA short reconstruction chain, for example RGB → depth → SAM.\nA compact failure-case gallery showing boundary errors or missed instances."
+    "text": "Qualitative presentation ideas\nPlace your best visual examples here using Quarto image blocks, for example:\n![](images/rgb_image1.png){fig-alt=\"RGB input scene\" width=\"48%\"}\n![](images/generated_sam1.png){fig-alt=\"Generated SAM segmentation\" width=\"48%\"}"
   },
   {
     "objectID": "results.html#suggested-figures",
@@ -88,7 +88,7 @@
     "href": "method.html#tokenization",
     "title": "Method",
     "section": "Tokenization",
-    "text": "Tokenization\nEach segmentation instance is represented with coordinates, bounding-box information, and mask tokens. To avoid collisions with the vocabularies used by the other modalities, SAM token IDs are stored in a dedicated offset range."
+    "text": "Tokenization\nEach segmentation instance is represented with coordinates, bounding-box information, and mask tokens. To avoid collisions with the vocabularies used by the other modalities, SAM token IDs are stored in a dedicated offset range.\n\nFIgure: Tokenization pipeline for train sample 20"
   },
   {
     "objectID": "method.html#important-clarification",
@@ -109,14 +109,14 @@
     "href": "method.html#dataset-structure",
     "title": "Method",
     "section": "Dataset structure",
-    "text": "Dataset structure\n\n50,000 training scenes.\n5,000 validation scenes.\n10 augmentations per scene.\nOne aligned file per modality per sample."
+    "text": "Dataset structure\n\n50,000 training scenes.\n5,000 validation scenes.\n10 augmentations per scene.\nOne aligned file per modality per sample.\n\n\nA figure of the labeling/tokenization pipeline.\nA compact diagram of the architecture.\nA short explanation of padding, truncation, and sequence length choices."
   },
   {
     "objectID": "method.html#what-to-add-before-submission",
     "href": "method.html#what-to-add-before-submission",
     "title": "Method",
     "section": "What to add before submission",
-    "text": "What to add before submission\nYou can enrich this page with:\n\nA figure of the labeling/tokenization pipeline.\nA compact diagram of the architecture.\nA short explanation of padding, truncation, and sequence length choices."
+    "text": "What to add before submission\n\nTokenization pipeline for train sample 20\n\nA figure of the labeling/tokenization pipeline.\nA compact diagram of the architecture.\nA short explanation of padding, truncation, and sequence length choices."
   },
   {
     "objectID": "report.html",
@@ -159,5 +159,26 @@
     "title": "Report and submission",
     "section": "Final checklist",
     "text": "Final checklist\n\nAdd your real figures and captions.\nReplace placeholder repository links.\nKeep total text roughly comparable to the 4-page report.\nMake sure the last visible commit is before the deadline."
+  },
+  {
+    "objectID": "method.html#labeling",
+    "href": "method.html#labeling",
+    "title": "Method",
+    "section": "Labeling",
+    "text": "Labeling\nExtending the model with segmentation instances instances requires an accurately segmented and tokenized dataset aligned with the already present modalities. For this purpose, we extend the multiCLEVR dataset from EPFL’s COM-304 course, which is composed of 50’000 train and 5’000 validation images, with 10 augmentation each.\nTo compute our modality tokens, we pseudo-labeled the RGB dataset using Meta Research’s SAM 2.1, extracting instance masks, and subsequently tokenizing them using the pre-trained 4M model tokenize.\n\nFigure: Examples of tokenized masks. First row: original cropped RGB image. Second row: SAMv2.1 Small AMG masked image. Third row, tokenized & detokenized mask\n\nFigure: Number of instance masks per image"
+  },
+  {
+    "objectID": "results.html#training-results",
+    "href": "results.html#training-results",
+    "title": "Results",
+    "section": "",
+    "text": "The final validation losses reported in the project are shown below.\n\n\n\nModality\nValidation CE\nComment\n\n\n\n\nscene_desc\n0.30\nLow-entropy text target\n\n\ntok_sam@256\n1.65\nCompetitive among visual modalities\n\n\ntok_normal@256\n4.12\nHarder structured visual prediction\n\n\ntok_depth@256\n4.26\nHarder structured visual prediction\n\n\ntok_rgb@256\n5.93\nHighest complexity among targets"
+  },
+  {
+    "objectID": "results.html#quantitative-results",
+    "href": "results.html#quantitative-results",
+    "title": "Results",
+    "section": "Quantitative results",
+    "text": "Quantitative results\n\nFigure: Examples of generated masks. First row: original cropped RGB image. Second row: SAMv2.1 Small AMG masked image. Third row, model-generated SAM masks"
   }
 ]

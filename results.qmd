@@ -2,7 +2,7 @@
 title: "Results"
 ---
 
-## Quantitative summary
+## Training results
 
 The final validation losses reported in the project are shown below.
 
@@ -14,27 +14,13 @@ The final validation losses reported in the project are shown below.
 | tok\_depth@256 | 4.26 | Harder structured visual prediction |
 | tok\_rgb@256 | 5.93 | Highest complexity among targets |
 
+## Quantitative results 
+
+![](images/quantitative_results1.png){fig-alt="Comparison of rgb image, ground truth for SAM and generated SAM masks" width="60%"}
+
+Figure: Examples of generated masks. First row: original cropped RGB image.  Second row: SAMv2.1 Small AMG masked image. Third row, model-generated SAM masks
+
+
 ## Interpretation
 
 SAM achieves lower CE than the other visual token modalities in this setup. On synthetic CLEVR scenes, this is plausible because segmentation masks are structurally simpler than RGB texture fields or continuous geometric signals.
-
-::: {.callout-soft}
-The main correction to keep in mind is conceptual: the project used **training from scratch**. The word “offset” refers to the token index range used for SAM data, such as coordinates or token IDs living in a shifted interval, rather than a warm-start or offset-training regime.
-:::
-
-## Qualitative presentation ideas
-
-For the final published version, this page is a good place to add:
-
-- A side-by-side RGB image and generated SAM result.
-- A short reconstruction chain, for example RGB → depth → SAM.
-- A compact failure-case gallery showing boundary errors or missed instances.
-
-## Suggested figures
-
-Place your best visual examples here using Quarto image blocks, for example:
-
-```markdown
-![](images/rgb_image1.png){fig-alt="RGB input scene" width="48%"}
-![](images/generated_sam1.png){fig-alt="Generated SAM segmentation" width="48%"}
-```

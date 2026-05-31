@@ -10,9 +10,26 @@ The project extends multiCLEVR with SAM-derived instance segmentation tokens. Ea
 
 Each segmentation instance is represented with coordinates, bounding-box information, and mask tokens. To avoid collisions with the vocabularies used by the other modalities, SAM token IDs are stored in a dedicated offset range.
 
-## Important clarification
+![](images/tokenizer_pipeline.png){fig-alt="Tokenization pipeline for train sample 20" width="60%"}
 
-This offset is a **data representation choice**. It does not imply offset training, checkpoint continuation, or warm-starting from a previously trained 4-modality model.
+FIgure: Tokenization pipeline for train sample 20
+
+## Labeling
+
+Extending the model with segmentation instances instances requires an accurately segmented and tokenized dataset aligned with the already present modalities. For this purpose, we extend the multiCLEVR dataset from EPFL's COM-304 course, which is composed of 50'000 train and 5'000 validation images, with 10 augmentation each. 
+
+To compute our modality tokens, we pseudo-labeled the RGB dataset using Meta Research's SAM 2.1, extracting instance masks, and subsequently tokenizing them using the pre-trained 4M model tokenize.
+
+![](images/labeling.png){fig-alt="Examples of tokenized masks" width="60%"}
+
+Figure: Examples of tokenized masks. First row: original cropped RGB image.  Second row: SAMv2.1 Small AMG masked image. Third row, tokenized & detokenized mask
+
+![](images/mask_ratio.png){fig-alt="Mask_ratio" width="60%"}
+
+Figure: Number of instance masks per image
+
+
+
 
 ## Training setup
 
@@ -25,9 +42,8 @@ The reported 5-modality model is trained jointly from scratch. All encoder and d
 - 10 augmentations per scene.
 - One aligned file per modality per sample.
 
-## What to add before submission
 
-You can enrich this page with:
+
 
 1. A figure of the labeling/tokenization pipeline.
 2. A compact diagram of the architecture.
