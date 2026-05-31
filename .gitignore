@@ -1,1 +1,6 @@
 **/*.quarto_ipynb
+
+.quarto/
+.idea/
+.vscode/
+
