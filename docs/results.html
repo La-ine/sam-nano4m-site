@@ -299,8 +299,12 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#training-results" id="toc-training-results" class="nav-link active" data-scroll-target="#training-results">Training results</a></li>
-  <li><a href="#quantitative-results" id="toc-quantitative-results" class="nav-link" data-scroll-target="#quantitative-results">Quantitative results</a></li>
+  <li><a href="#quantitative-summary" id="toc-quantitative-summary" class="nav-link active" data-scroll-target="#quantitative-summary">Quantitative summary</a>
+  <ul class="collapse">
+  <li><a href="#segmentation-quality" id="toc-segmentation-quality" class="nav-link" data-scroll-target="#segmentation-quality">Segmentation quality</a></li>
+  <li><a href="#fid" id="toc-fid" class="nav-link" data-scroll-target="#fid">FID</a></li>
+  </ul></li>
+  <li><a href="#modality-losses" id="toc-modality-losses" class="nav-link" data-scroll-target="#modality-losses">Modality losses</a></li>
   <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation">Interpretation</a></li>
   </ul>
 </nav>
@@ -328,9 +332,97 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="training-results" class="level2">
-<h2 class="anchored" data-anchor-id="training-results">Training results</h2>
-<p>The final validation losses reported in the project are shown below.</p>
+<section id="quantitative-summary" class="level2">
+<h2 class="anchored" data-anchor-id="quantitative-summary">Quantitative summary</h2>
+<p>The final project evaluation includes both segmentation overlap metrics and image-distribution metrics.</p>
+<section id="segmentation-quality" class="level3">
+<h3 class="anchored" data-anchor-id="segmentation-quality">Segmentation quality</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 30%">
+<col style="width: 40%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th style="text-align: right;">Value</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Mean IoU (all masks)</td>
+<td style="text-align: right;">0.845 ± 0.113</td>
+<td>Across 26,494 evaluated masks</td>
+</tr>
+<tr class="even">
+<td>Mean IoU (per-mask run)</td>
+<td style="text-align: right;">0.844 ± 0.113</td>
+<td>Across 26,534 evaluated masks</td>
+</tr>
+<tr class="odd">
+<td>mIoU (per-image mean IoU)</td>
+<td style="text-align: right;">0.855 ± 0.058</td>
+<td>Across 5,000 images</td>
+</tr>
+<tr class="even">
+<td>Min IoU</td>
+<td style="text-align: right;">0.130–0.131</td>
+<td>Worst-case masks remain poor</td>
+</tr>
+<tr class="odd">
+<td>Max IoU</td>
+<td style="text-align: right;">1.000</td>
+<td>Best cases are perfect</td>
+</tr>
+</tbody>
+</table>
+<p>These IoU numbers show that the model often captures the coarse object layout reasonably well on synthetic CLEVR scenes. At the same time, the relatively large standard deviation and low minimum IoU indicate that performance is uneven across examples, with some masks reconstructed much worse than others.</p>
+</section>
+<section id="fid" class="level3">
+<h3 class="anchored" data-anchor-id="fid">FID</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 30%">
+<col style="width: 40%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>FID comparison</th>
+<th style="text-align: right;">Value</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>GT vs decoded GT</td>
+<td style="text-align: right;">10.220</td>
+<td>Distortion introduced by tokenizer/decoder alone</td>
+</tr>
+<tr class="even">
+<td>Decoded GT tokens vs decoded predictions</td>
+<td style="text-align: right;">51.241</td>
+<td>Main reported evaluation FID over 4,000 samples</td>
+</tr>
+<tr class="odd">
+<td>Decoded GT tokens vs decoded predictions</td>
+<td style="text-align: right;">47.888</td>
+<td>Same evaluation over 5,000 samples</td>
+</tr>
+<tr class="even">
+<td>Raw GT vs predictions (in-memory Inception)</td>
+<td style="text-align: right;">79.017</td>
+<td>Strong overall gap in image distribution</td>
+</tr>
+</tbody>
+</table>
+<p>The most meaningful FID for the model itself is the comparison between <strong>decoded ground-truth tokens and decoded predictions</strong>, because it partially factors out reconstruction loss caused by the tokenizer. Even under that fairer comparison, the FID remains high, so the generated outputs are still noticeably worse than the target distribution.</p>
+</section>
+</section>
+<section id="modality-losses" class="level2">
+<h2 class="anchored" data-anchor-id="modality-losses">Modality losses</h2>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -368,14 +460,22 @@ ul.task-list li input[type="checkbox"] {
 </tbody>
 </table>
 </section>
-<section id="quantitative-results" class="level2">
-<h2 class="anchored" data-anchor-id="quantitative-results">Quantitative results</h2>
-<p><img src="images/quantitative_results1.png" class="img-fluid" style="width:60.0%" alt="Comparison of rgb image, ground truth for SAM and generated SAM masks"></p>
-<p>Figure: Examples of generated masks. First row: original cropped RGB image. Second row: SAMv2.1 Small AMG masked image. Third row, model-generated SAM masks</p>
-</section>
 <section id="interpretation" class="level2">
 <h2 class="anchored" data-anchor-id="interpretation">Interpretation</h2>
-<p>SAM achieves lower CE than the other visual token modalities in this setup. On synthetic CLEVR scenes, this is plausible because segmentation masks are structurally simpler than RGB texture fields or continuous geometric signals.</p>
+<p><img src="images/quantitative_results1.png" class="img-fluid" style="width:60.0%" alt="Comparison of rgb image, ground truth for SAM and generated SAM masks"></p>
+<p>Figure: Examples of generated masks. First row: original cropped RGB image. Second row: SAMv2.1 Small AMG masked image. Third row, model-generated SAM masks</p>
+<p>The quantitative picture is mixed. On one hand, IoU and mIoU suggest that the model often recovers useful segmentation structure; on the other hand, FID and the visual-token losses show that the generated outputs are still far from high-quality image synthesis.</p>
+<p>This gap is not surprising for several reasons:</p>
+<ul>
+<li>The model is small relative to modern multimodal foundation models.</li>
+<li>Training lasts only 3,815 steps, which is a short run for a five-modality setup.</li>
+<li>CLEVR is synthetic and structurally simple, so IoU can look decent even when boundaries and fine appearance details are imperfect.</li>
+<li>Part of the image quality loss comes from the tokenizer-decoder pipeline itself, as shown by the non-zero FID of 10.220 between raw ground truth and decoded ground truth.</li>
+<li>SAM sequences are padded and truncated to fit a fixed representation, which can hurt fine mask fidelity.</li>
+</ul>
+<div class="callout-soft">
+<p>The fairest conclusion is that the extension is <strong>functionally successful but not yet strong in absolute quality</strong>. The model clearly learns to integrate SAM as a fifth modality and produces meaningful segmentation outputs, but the final generations remain limited by model scale, training budget, and tokenizer bottlenecks.</p>
+</div>
 
 
 </section>

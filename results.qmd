@@ -2,9 +2,34 @@
 title: "Results"
 ---
 
-## Training results
+## Quantitative summary
 
-The final validation losses reported in the project are shown below.
+The final project evaluation includes both segmentation overlap metrics and image-distribution metrics.
+
+### Segmentation quality
+
+| Metric | Value | Notes |
+|---|---:|---|
+| Mean IoU (all masks) | 0.845 ± 0.113 | Across 26,494 evaluated masks |
+| Mean IoU (per-mask run) | 0.844 ± 0.113 | Across 26,534 evaluated masks |
+| mIoU (per-image mean IoU) | 0.855 ± 0.058 | Across 5,000 images |
+| Min IoU | 0.130–0.131 | Worst-case masks remain poor |
+| Max IoU | 1.000 | Best cases are perfect |
+
+These IoU numbers show that the model often captures the coarse object layout reasonably well on synthetic CLEVR scenes. At the same time, the relatively large standard deviation and low minimum IoU indicate that performance is uneven across examples, with some masks reconstructed much worse than others.
+
+### FID
+
+| FID comparison | Value | Interpretation |
+|---|---:|---|
+| GT vs decoded GT | 10.220 | Distortion introduced by tokenizer/decoder alone |
+| Decoded GT tokens vs decoded predictions | 51.241 | Main reported evaluation FID over 4,000 samples |
+| Decoded GT tokens vs decoded predictions | 47.888 | Same evaluation over 5,000 samples |
+| Raw GT vs predictions (in-memory Inception) | 79.017 | Strong overall gap in image distribution |
+
+The most meaningful FID for the model itself is the comparison between **decoded ground-truth tokens and decoded predictions**, because it partially factors out reconstruction loss caused by the tokenizer. Even under that fairer comparison, the FID remains high, so the generated outputs are still noticeably worse than the target distribution.
+
+## Modality losses
 
 | Modality | Validation CE | Comment |
 |---|---:|---|
@@ -14,13 +39,25 @@ The final validation losses reported in the project are shown below.
 | tok\_depth@256 | 4.26 | Harder structured visual prediction |
 | tok\_rgb@256 | 5.93 | Highest complexity among targets |
 
-## Quantitative results 
+
+## Interpretation
 
 ![](images/quantitative_results1.png){fig-alt="Comparison of rgb image, ground truth for SAM and generated SAM masks" width="60%"}
 
 Figure: Examples of generated masks. First row: original cropped RGB image.  Second row: SAMv2.1 Small AMG masked image. Third row, model-generated SAM masks
 
 
-## Interpretation
+The quantitative picture is mixed. On one hand, IoU and mIoU suggest that the model often recovers useful segmentation structure; on the other hand, FID and the visual-token losses show that the generated outputs are still far from high-quality image synthesis.
 
-SAM achieves lower CE than the other visual token modalities in this setup. On synthetic CLEVR scenes, this is plausible because segmentation masks are structurally simpler than RGB texture fields or continuous geometric signals.
+This gap is not surprising for several reasons:
+
+- The model is small relative to modern multimodal foundation models.
+- Training lasts only 3,815 steps, which is a short run for a five-modality setup.
+- CLEVR is synthetic and structurally simple, so IoU can look decent even when boundaries and fine appearance details are imperfect.
+- Part of the image quality loss comes from the tokenizer-decoder pipeline itself, as shown by the non-zero FID of 10.220 between raw ground truth and decoded ground truth.
+- SAM sequences are padded and truncated to fit a fixed representation, which can hurt fine mask fidelity.
+
+
+::: {.callout-soft}
+The fairest conclusion is that the extension is **functionally successful but not yet strong in absolute quality**. The model clearly learns to integrate SAM as a fifth modality and produces meaningful segmentation outputs, but the final generations remain limited by model scale, training budget, and tokenizer bottlenecks.
+:::
