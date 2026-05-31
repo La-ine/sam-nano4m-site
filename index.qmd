@@ -38,10 +38,6 @@ Training steps in the reported run.
 
 The extension adds a SAM-based segmentation modality to the existing multiCLEVR pipeline. RGB scenes are pseudo-labeled with SAM 2.1, converted into instance masks, normalized into fixed-length token sequences, and loaded alongside the original modalities.
 
-## Why the offset matters
-
-The SAM-related “offset” is purely a **data indexing convention**: SAM token IDs are assigned a dedicated range so they do not collide with other modality vocabularies. It does **not** mean the model was offset-trained or fine-tuned from an already converged checkpoint.
-
 ## What this website shows
 
 This site complements the report with a shorter narrative, result snapshots, and a clearer explanation of what the extension adds to nano4M. It is designed to be self-contained, so a reader can understand the high-level idea without opening the PDF first.

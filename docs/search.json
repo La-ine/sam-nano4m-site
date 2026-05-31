@@ -91,13 +91,6 @@
     "text": "What was added\nThe extension adds a SAM-based segmentation modality to the existing multiCLEVR pipeline. RGB scenes are pseudo-labeled with SAM 2.1, converted into instance masks, normalized into fixed-length token sequences, and loaded alongside the original modalities."
   },
   {
-    "objectID": "index.html#why-the-offset-matters",
-    "href": "index.html#why-the-offset-matters",
-    "title": "Overview",
-    "section": "Why the offset matters",
-    "text": "Why the offset matters\nThe SAM-related “offset” is purely a data indexing convention: SAM token IDs are assigned a dedicated range so they do not collide with other modality vocabularies. It does not mean the model was offset-trained or fine-tuned from an already converged checkpoint."
-  },
-  {
     "objectID": "index.html#what-this-website-shows",
     "href": "index.html#what-this-website-shows",
     "title": "Overview",
