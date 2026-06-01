@@ -13,11 +13,11 @@ The dataset images are geometrically simple and contains relatively easy shapes,
 
 ## Labeling & Tokenization
 
-The RGB dataset is pseudolabeled with [SAM v2.1 Small](https://github.com/facebookresearch/sam2), filtered for stable masks, and normalized to `64x64` size using ROI Align to better conserve the complex edges. Each mask is then processed by the pre-trained [4M SAM instance tokenizer (1k - 64x64)](https://huggingface.co/EPFL-VILAB/4M_tokenizers_sam-instance_1k_64), resulting in 16 (`4x4`, flattened) tokens per mask.
+The RGB dataset is pseudolabeled with [SAM v2.1 Small](https://github.com/facebookresearch/sam2), filtered for stable masks, and normalized to `64x64` size using ROI Align to better conserve the complex edges. Each mask is then processed by the pre-trained [4M SAM instance tokenizer (1k - 64)](https://huggingface.co/EPFL-VILAB/4M_tokenizers_sam-instance_1k_64), resulting in 16 (4x4, flattened) tokens per mask.
 
 The resulting representation for each instance segmentation is 22 tokens: 2 coordinates tokens, 4 bounding boxes  tokens in XYXY format, and 16 tokens for the mask.
 
-An offset is added to each of the coordinates (6 tokens total) to ensure that the logit computations does not conflict with each other, thus resulting in clearer differentiation between the different data type. Furthermore, the tokens are padded with the  `2561` token to reach a `256` length.
+An offset is added to each of the coordinates (6 tokens total) to ensure that the logit computations does not conflict with each other, thus resulting in clearer differentiation between the different data type. Furthermore, the tokens are padded with the  `2561` token to reach a 256 length.
 
 The final codebook is thus `2562`, and each mask is as follow:
 
