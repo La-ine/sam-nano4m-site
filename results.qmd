@@ -42,6 +42,11 @@ We scored `RGB -> SAM` generations using **mean Intersection over Union**.
 
 These IoU numbers show that the model often captures the coarse object layout reasonably well on synthetic CLEVR scenes. At the same time, the relatively large standard deviation and low minimum IoU indicate that performance is uneven across examples, with some masks reconstructed much worse than others.
 
+
+A degradation in mask generation quality is observable for objects in close proximity or within images containing a large number of them. While better results are visible for low-density scenes with fewer, well-separated instances, the model clearly struggles with high occlusion and complex spatial overlaps.
+
+![RGB to SAM generations (RGB from the original PNGs, not the RGB tokens)](images/rgb_to_sam.png)
+
 ### FID
 
 | FID comparison | Value | Interpretation |

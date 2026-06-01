@@ -368,9 +368,9 @@ window.Quarto = {
 </section>
 <section id="labeling-tokenization" class="level2">
 <h2 class="anchored" data-anchor-id="labeling-tokenization">Labeling &amp; Tokenization</h2>
-<p>The RGB dataset is pseudolabeled with <a href="https://github.com/facebookresearch/sam2">SAM v2.1 Small</a>, filtered for stable masks, and normalized to <code>64x64</code> size using ROI Align to better conserve the complex edges. Each mask is then processed by the pre-trained <a href="https://huggingface.co/EPFL-VILAB/4M_tokenizers_sam-instance_1k_64">4M SAM instance tokenizer (1k - 64x64)</a>, resulting in 16 (<code>4x4</code>, flattened) tokens per mask.</p>
+<p>The RGB dataset is pseudolabeled with <a href="https://github.com/facebookresearch/sam2">SAM v2.1 Small</a>, filtered for stable masks, and normalized to <code>64x64</code> size using ROI Align to better conserve the complex edges. Each mask is then processed by the pre-trained <a href="https://huggingface.co/EPFL-VILAB/4M_tokenizers_sam-instance_1k_64">4M SAM instance tokenizer (1k - 64)</a>, resulting in 16 (4x4, flattened) tokens per mask.</p>
 <p>The resulting representation for each instance segmentation is 22 tokens: 2 coordinates tokens, 4 bounding boxes tokens in XYXY format, and 16 tokens for the mask.</p>
-<p>An offset is added to each of the coordinates (6 tokens total) to ensure that the logit computations does not conflict with each other, thus resulting in clearer differentiation between the different data type. Furthermore, the tokens are padded with the <code>2561</code> token to reach a <code>256</code> length.</p>
+<p>An offset is added to each of the coordinates (6 tokens total) to ensure that the logit computations does not conflict with each other, thus resulting in clearer differentiation between the different data type. Furthermore, the tokens are padded with the <code>2561</code> token to reach a 256 length.</p>
 <p>The final codebook is thus <code>2562</code>, and each mask is as follow:</p>
 <table class="caption-top table">
 <colgroup>

@@ -439,6 +439,13 @@ ul.task-list li input[type="checkbox"] {
 </tbody>
 </table>
 <p>These IoU numbers show that the model often captures the coarse object layout reasonably well on synthetic CLEVR scenes. At the same time, the relatively large standard deviation and low minimum IoU indicate that performance is uneven across examples, with some masks reconstructed much worse than others.</p>
+<p>A degradation in mask generation quality is observable for objects in close proximity or within images containing a large number of them. While better results are visible for low-density scenes with fewer, well-separated instances, the model clearly struggles with high occlusion and complex spatial overlaps.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/rgb_to_sam.png" class="img-fluid figure-img"></p>
+<figcaption>RGB to SAM generations (RGB from the original PNGs, not the RGB tokens)</figcaption>
+</figure>
+</div>
 </section>
 <section id="fid" class="level3">
 <h3 class="anchored" data-anchor-id="fid">FID</h3>
