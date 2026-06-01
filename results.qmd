@@ -58,6 +58,29 @@ A degradation in mask generation quality is observable for objects in close prox
 
 The most meaningful FID for the model itself is the comparison between **decoded ground-truth tokens and decoded predictions**, because it partially factors out reconstruction loss caused by the tokenizer. Even under that fairer comparison, the FID remains high, so the generated outputs are still noticeably worse than the target distribution.
 
+SAM tokens obtain a higher FID direct chaining (*modality -> RGB*) result compared to geometric modalities.
+
+| | FID (Image Gen) |
+|--- | --- |
+| Normal -> RGB | 38.279 |
+| Depth -> RGB | 42.073 |
+| SAM -> RGB | 53.863 |
+| Scene description -> RGB | 61.638 |
+
+
+While cross modality chained generations does not have a significant increase when SAM is used as a middle-modality compared to normal and depth.
+
+| Generation Chain |  FID |
+| --- | --- |
+| Text → Normal → RGB | 39.898 |
+| Text → SAM → RGB |  40.189 |
+| Text → Depth → SAM → RGB | 38.785 |
+| Text → Normal → SAM → RGB | 40.213 |
+| Text → SAM → Normal → RGB | 40.315 |
+| Normal → SAM → RGB | 36.184 |
+| Depth → SAM → RGB | 37.430 |
+| SAM → Normal → RGB | 39.029 |
+
 
 ## Interpretation
 

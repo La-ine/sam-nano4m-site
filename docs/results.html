@@ -486,6 +486,76 @@ ul.task-list li input[type="checkbox"] {
 </tbody>
 </table>
 <p>The most meaningful FID for the model itself is the comparison between <strong>decoded ground-truth tokens and decoded predictions</strong>, because it partially factors out reconstruction loss caused by the tokenizer. Even under that fairer comparison, the FID remains high, so the generated outputs are still noticeably worse than the target distribution.</p>
+<p>SAM tokens obtain a higher FID direct chaining (<em>modality -&gt; RGB</em>) result compared to geometric modalities.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th>FID (Image Gen)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Normal -&gt; RGB</td>
+<td>38.279</td>
+</tr>
+<tr class="even">
+<td>Depth -&gt; RGB</td>
+<td>42.073</td>
+</tr>
+<tr class="odd">
+<td>SAM -&gt; RGB</td>
+<td>53.863</td>
+</tr>
+<tr class="even">
+<td>Scene description -&gt; RGB</td>
+<td>61.638</td>
+</tr>
+</tbody>
+</table>
+<p>While cross modality chained generations does not have a significant increase when SAM is used as a middle-modality compared to normal and depth.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Generation Chain</th>
+<th>FID</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Text → Normal → RGB</td>
+<td>39.898</td>
+</tr>
+<tr class="even">
+<td>Text → SAM → RGB</td>
+<td>40.189</td>
+</tr>
+<tr class="odd">
+<td>Text → Depth → SAM → RGB</td>
+<td>38.785</td>
+</tr>
+<tr class="even">
+<td>Text → Normal → SAM → RGB</td>
+<td>40.213</td>
+</tr>
+<tr class="odd">
+<td>Text → SAM → Normal → RGB</td>
+<td>40.315</td>
+</tr>
+<tr class="even">
+<td>Normal → SAM → RGB</td>
+<td>36.184</td>
+</tr>
+<tr class="odd">
+<td>Depth → SAM → RGB</td>
+<td>37.430</td>
+</tr>
+<tr class="even">
+<td>SAM → Normal → RGB</td>
+<td>39.029</td>
+</tr>
+</tbody>
+</table>
 </section>
 </section>
 <section id="interpretation" class="level2">
