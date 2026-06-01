@@ -6,8 +6,6 @@ title: "Report"
 
 After finalizing our project "SAM x Nano4M", we wanted to highlight our work by creating this simple website and showcase our findings and experiments.
 
-You can find the final report here 
-
-[Download the final report](docs/SAM_x_Nano4M_report.pdf) <!--change the path here-->
+You can find the project report here: [Download the report](docs/COM304_nano4M_final_report.pdf)
 
 Thanks for reading us :)

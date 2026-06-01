@@ -87,7 +87,7 @@ While cross modality chained generations does not have a significant increase wh
 
 Here are qualitative examples of chain reconstruction and generation produced by our model.
 
-::: {layout-ncol=3}
+::: {layout-ncol=1}
 ![Normal -> SAM -> RGB](images/chain_normal_sam_rgb_100.png){.lightbox group="results" width=100%}
 ![Scene desc -> SAM -> RGB](images/chain_desc_sam_rgb_100.png){.lightbox group="results" width=100%}
 ![Scene desc -> Depth -> SAM -> RGB](images/chain_desc_depth_sam_rgb.png_100.png){.lightbox group="results" width=100%}
