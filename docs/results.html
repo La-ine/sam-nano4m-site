@@ -47,6 +47,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/bootstrap/bootstrap-2c169b83e1fc2996b25bcc8774810429.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="site_libs/bootstrap/bootstrap-dark-a961672161e59729fb17efcbc637b2b3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <link href="site_libs/bootstrap/bootstrap-2c169b83e1fc2996b25bcc8774810429.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -305,6 +308,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#segmentation-quality" id="toc-segmentation-quality" class="nav-link" data-scroll-target="#segmentation-quality">Segmentation quality</a></li>
   <li><a href="#fid" id="toc-fid" class="nav-link" data-scroll-target="#fid">FID</a></li>
   </ul></li>
+  <li><a href="#visual-results" id="toc-visual-results" class="nav-link" data-scroll-target="#visual-results">Visual results</a></li>
   <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation">Interpretation</a></li>
   </ul>
 </nav>
@@ -380,13 +384,13 @@ ul.task-list li input[type="checkbox"] {
 <p>We observe a relative low loss for the SAM modality, caused by the the high frequency of highly predictable padding tokens required to reach the fixed 256-token length, which drastically lowers the overall entropy of the prediction task compared to dense visual modalities like RGB.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/eval_loss.png" class="img-fluid figure-img" style="width:100.0%" alt="Eval loss"></p>
+<p><a href="images/eval_loss.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Eval loss"><img src="images/eval_loss.png" class="img-fluid figure-img" style="width:100.0%" alt="Eval loss"></a></p>
 <figcaption>Eval loss</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/training_loss.png" class="img-fluid figure-img" style="width:100.0%" alt="Training loss"></p>
+<p><a href="images/training_loss.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Training loss"><img src="images/training_loss.png" class="img-fluid figure-img" style="width:100.0%" alt="Training loss"></a></p>
 <figcaption>Training loss</figcaption>
 </figure>
 </div>
@@ -442,7 +446,7 @@ ul.task-list li input[type="checkbox"] {
 <p>A degradation in mask generation quality is observable for objects in close proximity or within images containing a large number of them. While better results are visible for low-density scenes with fewer, well-separated instances, the model clearly struggles with high occlusion and complex spatial overlaps.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/rgb_to_sam.png" class="img-fluid figure-img"></p>
+<p><a href="images/rgb_to_sam.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="RGB to SAM generations (RGB from the original PNGs, not the RGB tokens)"><img src="images/rgb_to_sam.png" class="img-fluid figure-img" alt="RGB to SAM generations (RGB from the original PNGs, not the RGB tokens)"></a></p>
 <figcaption>RGB to SAM generations (RGB from the original PNGs, not the RGB tokens)</figcaption>
 </figure>
 </div>
@@ -558,11 +562,22 @@ ul.task-list li input[type="checkbox"] {
 </table>
 </section>
 </section>
+<section id="visual-results" class="level2">
+<h2 class="anchored" data-anchor-id="visual-results">Visual results</h2>
+<p>Here are qualitative examples of chain reconstruction and generation produced by our model.</p>
+<div class="quarto-layout-panel" data-layout-ncol="3">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
+<p><img src="images/chain_normal_sam_rgb_100.png" class="img-fluid" data-group="results" alt="Normal -> SAM -> RGB"> <img src="images/chain_desc_sam_rgb_100.png" class="img-fluid" data-group="results" alt="Scene desc -> SAM -> RGB"> <img src="images/chain_desc_depth_sam_rgb.png_100.png" class="img-fluid" data-group="results" alt="Scene desc -> Depth -> SAM -> RGB"> <img src="images/chain_desc_normal_sam_rgb.png_100.png" class="img-fluid" data-group="results" alt="Scene desc -> Normal -> SAM -> RGB"> <img src="images/chain_desc_sam_depth_rgb.png_100.png" class="img-fluid" data-group="results" alt="Scene desc -> SAM -> Depth -> RGB"> <img src="images/chain_desc_sam_normal_rgb.png_100.png" class="img-fluid" data-group="results" alt="Scene desc -> SAM -> Normal -> RGB"> <img src="images/chain_desc_sam_depth_normal_rgb.png_100.png" class="img-fluid" data-group="results" alt="Scene desc -> SAM -> Depth -> Normal -> RGB"> <img src="images/chain_desc_sam_normal_depth_rgb.png_100.png" class="img-fluid" data-group="results" alt="Scene desc -> SAM -> Normal -> depth -> RGB"></p>
+</div>
+</div>
+</div>
+</section>
 <section id="interpretation" class="level2">
 <h2 class="anchored" data-anchor-id="interpretation">Interpretation</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/quantitative_results1.png" class="img-fluid figure-img" style="width:100.0%" alt="Comparison of rgb image, ground truth for SAM and generated SAM masks"></p>
+<p><a href="images/quantitative_results1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Examples of generated masks. First row: original cropped RGB image. Second row: SAMv2.1 Small AMG masked image. Third row, model-generated SAM masks"><img src="images/quantitative_results1.png" class="img-fluid figure-img" style="width:100.0%" alt="Comparison of rgb image, ground truth for SAM and generated SAM masks"></a></p>
 <figcaption>Examples of generated masks. First row: original cropped RGB image. Second row: SAMv2.1 Small AMG masked image. Third row, model-generated SAM masks</figcaption>
 </figure>
 </div>
@@ -1010,6 +1025,38 @@ ul.task-list li input[type="checkbox"] {
 </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

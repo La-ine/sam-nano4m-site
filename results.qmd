@@ -1,5 +1,6 @@
 ---
 title: "Results"
+lightbox: true
 ---
 
 
@@ -80,6 +81,22 @@ While cross modality chained generations does not have a significant increase wh
 | Normal → SAM → RGB | 36.184 |
 | Depth → SAM → RGB | 37.430 |
 | SAM → Normal → RGB | 39.029 |
+
+
+## Visual results
+
+Here are qualitative examples of chain reconstruction and generation produced by our model.
+
+::: {layout-ncol=3}
+![Normal -> SAM -> RGB](images/chain_normal_sam_rgb_100.png){group="results"}
+![Scene desc -> SAM -> RGB](images/chain_desc_sam_rgb_100.png){group="results"}
+![Scene desc -> Depth -> SAM -> RGB](images/chain_desc_depth_sam_rgb.png_100.png){group="results"}
+![Scene desc -> Normal -> SAM -> RGB](images/chain_desc_normal_sam_rgb.png_100.png){group="results"}
+![Scene desc -> SAM -> Depth -> RGB](images/chain_desc_sam_depth_rgb.png_100.png){group="results"}
+![Scene desc -> SAM -> Normal -> RGB](images/chain_desc_sam_normal_rgb.png_100.png){group="results"}
+![Scene desc -> SAM -> Depth -> Normal -> RGB](images/chain_desc_sam_depth_normal_rgb.png_100.png){group="results"}
+![Scene desc -> SAM -> Normal -> depth -> RGB](images/chain_desc_sam_normal_depth_rgb.png_100.png){group="results"}
+:::
 
 
 ## Interpretation
