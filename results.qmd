@@ -8,7 +8,7 @@ lightbox: true
 
 The model has been trained for around **5 hours** on 2 NVIDIA L40S GPUs.
 
-The final validation loss of the model is as follow:
+The final validation losses of the model are as follows:
 
 | Modality | Validation CE | Comment |
 |---|---:|---|
@@ -19,7 +19,7 @@ The final validation loss of the model is as follow:
 | tok\_depth@256 | 4.27 | Harder structured visual prediction |
 | tok\_rgb@256 | 5.98 | Highest complexity among targets |
 
-We observe a relative low loss for the SAM modality, caused by the the high frequency of highly predictable padding tokens required to reach the fixed 256-token length, which drastically lowers the overall entropy of the prediction task compared to dense visual modalities like RGB.
+We observe a relatively low loss for the SAM modality. This is partly explained by the simplicity of segmentation masks in synthetic CLEVR scenes and by the high frequency of highly predictable padding tokens required to reach the fixed 256-token length, which lowers the entropy of the prediction task compared with dense visual modalities such as RGB.
 
 ![Eval loss](images/eval_loss.png){fig-alt="Eval loss" width="100%"}
 
@@ -69,7 +69,7 @@ SAM tokens obtain a higher FID direct chaining (*modality -> RGB*) result compar
 | Scene description -> RGB | 61.638 |
 
 
-While cross modality chained generations does not have a significant increase when SAM is used as a middle-modality compared to normal and depth.
+Cross-modal chained generations involving SAM perform comparably to chains using geometric modalities. In particular, `Normal → SAM → RGB` achieves the best FID among the tested chains, suggesting that segmentation can contribute useful structural cues for image synthesis.
 
 | Generation Chain |  FID |
 | --- | --- |

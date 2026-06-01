@@ -4,8 +4,10 @@ title: "Report"
 
 ## What this site is for
 
-After finalizing our project "SAM x Nano4M", we wanted to highlight our work by creating this simple website and showcase our findings and experiments.
+This website presents the final COM-304 project **SAM x Nano4M**, developed by Laïne Satou Diongue, Nicola Rauseo, and Shabnam Tajik.
 
-You can find the project report here: [Download the report](docs/COM304_nano4M_final_report.pdf)
+The project extends nano4M with a fifth modality: SAM segmentation tokens. The goal is not to build a specialized segmentation model, but to test whether segmentation tokens can be integrated into a compact multimodal masked modeling framework and co-trained jointly with RGB, depth, normals, and scene descriptions.
 
-Thanks for reading us :)
+Across the site, we summarize the method, key quantitative results, and qualitative examples. The full written report is available here: [Download the report](./COM304_nano4M_final_report.pdf)
+
+The central conclusion is that SAM integrates cleanly into nano4M and trains stably with the other modalities, but absolute generation quality remains limited by tokenization bottlenecks, model scale, and training budget.

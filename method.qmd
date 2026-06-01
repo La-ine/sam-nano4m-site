@@ -4,11 +4,11 @@ title: "Method"
 
 ## Dataset
 
-Extending the model with segmentation instances instances requires an accurately segmented and tokenized dataset aligned with the already present modalities.
+Extending the model with segmentation instances requires an accurately segmented and tokenized dataset aligned with the already present modalities.
 
-For this purpose, we extend the multiCLEVR dataset from EPFL's COM-304 course, which is composed of 50'000 train and 5'000 validation images, with 10 augmentation each, aligned with each other.
+For this purpose, we extend the multiCLEVR dataset from EPFL’s COM-304 course, which is composed of 50’000 training and 5’000 validation scenes, each rendered with 10 augmentations aligned across modalities.
 
-The dataset images are geometrically simple and contains relatively easy shapes, thus it is particularly fit for segmentations tasks.
+The dataset contains geometrically simple synthetic scenes, which makes it a convenient setting for studying segmentation token generation in a controlled multimodal setup.
 
 ::: {.callout-note}
 ## Dataset Access
@@ -17,14 +17,23 @@ The full dataset used in this project is available on [Google Drive](https://dri
 
 
 ## Labeling & Tokenization
+The RGB dataset is pseudo-labeled with [SAM v2.1 Small](https://github.com/facebookresearch/sam2). Each augmented RGB image is sampled on a fixed 16×16 grid to extract instance masks, bounding boxes, and coordinates, then filtered with an IoU threshold of 0.94, a stability threshold of 0.96, and an NMS threshold of 0.5.
 
-The RGB dataset is pseudolabeled with [SAM v2.1 Small](https://github.com/facebookresearch/sam2), filtered for stable masks, and normalized to `64x64` size using ROI Align to better conserve the complex edges. Each mask is then processed by the pre-trained [4M SAM instance tokenizer (1k - 64)](https://huggingface.co/EPFL-VILAB/4M_tokenizers_sam-instance_1k_64), resulting in 16 (4x4, flattened) tokens per mask.
+The filtered masks are processed with RoI Align to obtain `64×64` square binary masks, then resized to `256×256` to align with the other modalities. Each mask is passed through the pre-trained [4M SAM instance tokenizer (1k - 64)](https://huggingface.co/EPFL-VILAB/4M_tokenizers_sam-instance_1k_64), producing 16 flattened mask tokens.
 
-The resulting representation for each instance segmentation is 22 tokens: 2 coordinates tokens, 4 bounding boxes  tokens in XYXY format, and 16 tokens for the mask.
+The resulting representation for each segmentation instance contains 22 tokens: 2 coordinate tokens, 4 bounding-box tokens in XYXY format, and 16 mask tokens.
 
-An offset is added to each of the coordinates (6 tokens total) to ensure that the logit computations does not conflict with each other, thus resulting in clearer differentiation between the different data type. Furthermore, the tokens are padded with the  `2561` token to reach a 256 length.
+To avoid index collisions, the coordinate and bounding-box tokens are shifted by offsets on top of the 1024-sized segmentation codebook. This is a bookkeeping convention rather than an architectural change, but it helps the model distinguish the different token types more clearly.
 
-The final codebook is thus `2562`, and each mask is as follow:
+The flattened instance sequence is then padded or sliced to a fixed length of 256 tokens using padding token 2561, resulting in a final overall codebook size of `2562`.
+
+The token layout for each instance is:
+
+|Field|X COORD|Y COORD|X MIN|Y MIN|X MAX|Y MAX|Mask|
+|--|--|--|--|--|--|--|--|
+|Number of tokens|1|1|1|1|1|1|16|
+|Offset start|1024|1280|1536|1792|2048|2304|0|
+|Codebook range|1024-1279|1280-1535|1536-1791|1792-2047|2048-2303|2304-2559|0-1023|
 
 | | X COORD | Y COORD | X MIN | Y MIN | X MAX | Y MAX |  Mask |
 |---|---|---|---|---|---|---|---|
@@ -38,7 +47,9 @@ Labeling and Tokenization took around 25 hours on 2 NVIDIA L40s GPUs.
 
 ### Mask quality
 
-We observe that the reconstructed mask tend to have unprecise edges and larger uncovered areas cause by the loss of information during the downsizing to a smaller dimensionality space during tokenization. This is particularly accentuated for larger masks. Furthermore, some artifacts from from shadows or faces of the polygons are tokenized, leading to more noisy data.
+We observe that reconstructed masks tend to have imprecise edges and larger uncovered areas because information is lost during resizing and tokenization into a lower-dimensional latent space. This effect is more pronounced for larger masks.
+
+We also observe occasional artifacts on object faces and shadows, which introduce noise into the tokenized segmentation data.
 
 ![Examples of tokenized masks. First row: original cropped RGB image. Second row: SAMv2.1 Small AMG masked image. Third row: Our tokenized & detokenized mask](images/labeling.png){fig-alt="Examples of tokenized masks" width="100%"}
 
@@ -58,21 +69,25 @@ $$
 | Tokenized Mask | Validation | $0.965 \pm 0.051$ | $1.980$ | $1.021 \pm 0.015$ |  $3.260$ |
 | AMG Mask | Train (5'000 subset) | $0.983 \pm 0.009$ | $0.240$ | $1.003 \pm 0.011$ | $1.520$ |
 
-Our 256 array length limit causes certain masks to be cropped out if an image has more or equal 11 instances (244 tokens). In the violin plot below, we observe how around 1.5-2% exceed this limits, losing at least a mask.
+Because the representation is capped at 256 tokens, scenes with too many instances may lose some objects after flattening. In practice, the vast majority of images contain between 1 and 11 masks, while only about 1–2% of images exceed 12 masks and are therefore affected by truncation.
 
 ![Number of instance masks per image](images/mask_ratio.png){fig-alt="Mask_ratio" width="100%"}
 
 ## Training setup
 
-The reported 5-modality model is trained jointly from scratch, using a lazy aligned dataloader with SAM treated as an additional masked prediction target within the same multimodal framework.
+The reported 5-modality model is trained jointly from scratch, using a lazy aligned dataloader with SAM treated as an additional masked prediction target within the same multimodal framework. Nano4M uses a shared ViT-style encoder and per-modality decoder heads. The SAM decoder follows the same structure as the existing heads: a small transformer with cross-attention to the encoder, followed by a linear projection over the SAM vocabulary.
 
-| Config |  Value |
-| --- | --- |
-| Total Tokens | 5B |
-| Warmup Tokens | 500M |
-| Optimizer | AdamW |
-| Optimizer Betas | [0.9, 0.95] |
-| Optimizer Weight Decay | 0.5 |
-| Max - Min LR | 0.0006 - 0.000001 |
-| Gradient Clipping | 1.0 |
-| Precision | `bf16` |
+|Config|Value|
+|--|--|
+|Total Tokens|5B|
+|Warmup Tokens|500M|
+|Optimizer|AdamW|
+|Optimizer Betas|[0.9, 0.95]|
+|Optimizer Weight Decay|0.05|
+|Max - Min LR|0.0006 - 0.000001|
+|Gradient Clipping|1.0|
+|Precision|bf16|
+|GPUs|2 × NVIDIA L40S|
+|Training setup|PyTorch DDP|
+|Batch size|256 per GPU|
+|Steps in reported run|38’146|

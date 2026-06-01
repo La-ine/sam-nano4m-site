@@ -32,7 +32,7 @@ Training steps in the reported run.
 - SAM tokens can be integrated into nano4M without changing the core model architecture.
 - The model is trained **from scratch**, not warm-started from a previous checkpoint.
 - The “offset” in this project refers to the **token index range in the data representation**, not offset training.
-- SAM reaches competitive loss relative to the other visual modalities on synthetic CLEVR scenes.
+- SAM reaches competitive validation loss relative to the other visual modalities on synthetic CLEVR scenes, although this number is partly helped by the simplicity of the masks and the large number of padding tokens.
 
 ## What was added
 
@@ -40,4 +40,4 @@ The extension adds a SAM-based segmentation modality to the existing multiCLEVR 
 
 ## What this website shows
 
-This site complements the report with a shorter narrative, result snapshots, and a clearer explanation of what the extension adds to nano4M. It is designed to be self-contained, so a reader can understand the high-level idea without opening the PDF first.
+This site complements the report with a shorter narrative, result snapshots, and a clearer explanation of what the extension adds to nano4M. It is designed to be self-contained, so a reader can understand the high-level idea without opening the PDF first. It also clarifies the main limitation of the result: stable multimodal integration was successful, but absolute generation quality remains mixed.
