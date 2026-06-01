@@ -380,11 +380,16 @@ ul.task-list li input[type="checkbox"] {
 <p>We observe a relative low loss for the SAM modality, caused by the the high frequency of highly predictable padding tokens required to reach the fixed 256-token length, which drastically lowers the overall entropy of the prediction task compared to dense visual modalities like RGB.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/eval_loss.png" class="img-fluid figure-img"></p>
+<p><img src="images/eval_loss.png" class="img-fluid figure-img" style="width:100.0%" alt="Eval loss"></p>
 <figcaption>Eval loss</figcaption>
 </figure>
 </div>
-<p><img src="images/training_loss.png" class="img-fluid" alt="Training loss">{fig-alt=“Training loss” width=“100%”)</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/training_loss.png" class="img-fluid figure-img" style="width:100.0%" alt="Training loss"></p>
+<figcaption>Training loss</figcaption>
+</figure>
+</div>
 </section>
 <section id="quantitative-summary" class="level2">
 <h2 class="anchored" data-anchor-id="quantitative-summary">Quantitative summary</h2>
@@ -478,8 +483,12 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="interpretation" class="level2">
 <h2 class="anchored" data-anchor-id="interpretation">Interpretation</h2>
-<p><img src="images/quantitative_results1.png" class="img-fluid" style="width:60.0%" alt="Comparison of rgb image, ground truth for SAM and generated SAM masks"></p>
-<p>Figure: Examples of generated masks. First row: original cropped RGB image. Second row: SAMv2.1 Small AMG masked image. Third row, model-generated SAM masks</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/quantitative_results1.png" class="img-fluid figure-img" style="width:100.0%" alt="Comparison of rgb image, ground truth for SAM and generated SAM masks"></p>
+<figcaption>Examples of generated masks. First row: original cropped RGB image. Second row: SAMv2.1 Small AMG masked image. Third row, model-generated SAM masks</figcaption>
+</figure>
+</div>
 <p>The quantitative picture is mixed. On one hand, IoU and mIoU suggest that the model often recovers useful segmentation structure; on the other hand, FID and the visual-token losses show that the generated outputs are still far from high-quality image synthesis.</p>
 <p>This gap is not surprising for several reasons:</p>
 <ul>

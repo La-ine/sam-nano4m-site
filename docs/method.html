@@ -334,7 +334,6 @@ window.Quarto = {
   <li><a href="#mask-quality" id="toc-mask-quality" class="nav-link" data-scroll-target="#mask-quality">Mask quality</a></li>
   </ul></li>
   <li><a href="#training-setup" id="toc-training-setup" class="nav-link" data-scroll-target="#training-setup">Training setup</a></li>
-  <li><a href="#dataset-structure" id="toc-dataset-structure" class="nav-link" data-scroll-target="#dataset-structure">Dataset structure</a></li>
   </ul>
 </nav>
     </div>
@@ -363,7 +362,9 @@ window.Quarto = {
 
 <section id="dataset" class="level2">
 <h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
-<p>Extending the model with segmentation instances instances requires an accurately segmented and tokenized dataset aligned with the already present modalities. For this purpose, we extend the multiCLEVR dataset from EPFL’s COM-304 course, which is composed of 50’000 train and 5’000 validation images, with 10 augmentation each.</p>
+<p>Extending the model with segmentation instances instances requires an accurately segmented and tokenized dataset aligned with the already present modalities.</p>
+<p>For this purpose, we extend the multiCLEVR dataset from EPFL’s COM-304 course, which is composed of 50’000 train and 5’000 validation images, with 10 augmentation each, aligned with each other.</p>
+<p>The dataset images are geometrically simple and contains relatively easy shapes, thus it is particularly fit for segmentations tasks.</p>
 </section>
 <section id="labeling-tokenization" class="level2">
 <h2 class="anchored" data-anchor-id="labeling-tokenization">Labeling &amp; Tokenization</h2>
@@ -445,7 +446,9 @@ window.Quarto = {
 </div>
 <p>Observing the coverage ratio (<span class="math inline">\(1.0\)</span> ideal, low is worse) and the redundancy index (<span class="math inline">\(1.0\)</span> ideal, high is worse), we obtain decent results, showing that the instance masks generally cover most of the image and there is relatively little overlap between them.</p>
 <p><span class="math display">\[
-\text{Coverage Ratio} = \frac{\text{Area of Union of All Masks}}{\text{Total Image Area}} \\
+\text{Coverage Ratio} = \frac{\text{Area of Union of All Masks}}{\text{Total Image Area}}
+\]</span></p>
+<p><span class="math display">\[
 \text{Redundancy index} = \frac{\sum{\text{Individual Mask Areas}}}{\text{Area of Union of All Masks}}
 \]</span></p>
 <table class="caption-top table">
@@ -505,21 +508,49 @@ window.Quarto = {
 </section>
 <section id="training-setup" class="level2">
 <h2 class="anchored" data-anchor-id="training-setup">Training setup</h2>
-<p>The reported 5-modality model is trained jointly from scratch. All encoder and decoder parameters are initialized together, and SAM is treated as an additional masked prediction target within the same multimodal framework.</p>
-</section>
-<section id="dataset-structure" class="level2">
-<h2 class="anchored" data-anchor-id="dataset-structure">Dataset structure</h2>
-<ul>
-<li>50,000 training scenes.</li>
-<li>5,000 validation scenes.</li>
-<li>10 augmentations per scene.</li>
-<li>One aligned file per modality per sample.</li>
-</ul>
-<ol type="1">
-<li>A figure of the labeling/tokenization pipeline.</li>
-<li>A compact diagram of the architecture.</li>
-<li>A short explanation of padding, truncation, and sequence length choices.</li>
-</ol>
+<p>The reported 5-modality model is trained jointly from scratch, using a lazy aligned dataloader with SAM treated as an additional masked prediction target within the same multimodal framework.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Config</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Total Tokens</td>
+<td>5B</td>
+</tr>
+<tr class="even">
+<td>Warmup Tokens</td>
+<td>500M</td>
+</tr>
+<tr class="odd">
+<td>Optimizer</td>
+<td>AdamW</td>
+</tr>
+<tr class="even">
+<td>Optimizer Betas</td>
+<td>[0.9, 0.95]</td>
+</tr>
+<tr class="odd">
+<td>Optimizer Weight Decay</td>
+<td>0.5</td>
+</tr>
+<tr class="even">
+<td>Max - Min LR</td>
+<td>0.0006 - 0.000001</td>
+</tr>
+<tr class="odd">
+<td>Gradient Clipping</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td>Precision</td>
+<td><code>bf16</code></td>
+</tr>
+</tbody>
+</table>
 
 
 </section>

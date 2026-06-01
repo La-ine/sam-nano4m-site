@@ -20,9 +20,9 @@ The final validation loss of the model is as follow:
 
 We observe a relative low loss for the SAM modality, caused by the the high frequency of highly predictable padding tokens required to reach the fixed 256-token length, which drastically lowers the overall entropy of the prediction task compared to dense visual modalities like RGB.
 
-![Eval loss](images/eval_loss.png)
+![Eval loss](images/eval_loss.png){fig-alt="Eval loss" width="100%"}
 
-![Training loss](images/training_loss.png){fig-alt="Training loss" width="100%")
+![Training loss](images/training_loss.png){fig-alt="Training loss" width="100%"}
 
 ## Quantitative summary
 
@@ -56,9 +56,7 @@ The most meaningful FID for the model itself is the comparison between **decoded
 
 ## Interpretation
 
-![](images/quantitative_results1.png){fig-alt="Comparison of rgb image, ground truth for SAM and generated SAM masks" width="60%"}
-
-Figure: Examples of generated masks. First row: original cropped RGB image.  Second row: SAMv2.1 Small AMG masked image. Third row, model-generated SAM masks
+![Examples of generated masks. First row: original cropped RGB image.  Second row: SAMv2.1 Small AMG masked image. Third row, model-generated SAM masks](images/quantitative_results1.png){fig-alt="Comparison of rgb image, ground truth for SAM and generated SAM masks" width="100%"}
 
 
 The quantitative picture is mixed. On one hand, IoU and mIoU suggest that the model often recovers useful segmentation structure; on the other hand, FID and the visual-token losses show that the generated outputs are still far from high-quality image synthesis.

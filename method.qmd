@@ -4,7 +4,12 @@ title: "Method"
 
 ## Dataset
 
-Extending the model with segmentation instances instances requires an accurately segmented and tokenized dataset aligned with the already present modalities. For this purpose, we extend the multiCLEVR dataset from EPFL's COM-304 course, which is composed of 50'000 train and 5'000 validation images, with 10 augmentation each.
+Extending the model with segmentation instances instances requires an accurately segmented and tokenized dataset aligned with the already present modalities.
+
+For this purpose, we extend the multiCLEVR dataset from EPFL's COM-304 course, which is composed of 50'000 train and 5'000 validation images, with 10 augmentation each, aligned with each other.
+
+The dataset images are geometrically simple and contains relatively easy shapes, thus it is particularly fit for segmentations tasks.
+
 
 ## Labeling & Tokenization
 
@@ -35,7 +40,10 @@ We observe that the reconstructed mask tend to have unprecise edges and larger u
 Observing the coverage ratio ($1.0$ ideal, low is worse) and the redundancy index ($1.0$ ideal, high is worse), we obtain decent results, showing that the instance masks generally cover most of the image and there is relatively little overlap between them.
 
 $$
-\text{Coverage Ratio} = \frac{\text{Area of Union of All Masks}}{\text{Total Image Area}} \\
+\text{Coverage Ratio} = \frac{\text{Area of Union of All Masks}}{\text{Total Image Area}}
+$$
+
+$$
 \text{Redundancy index} = \frac{\sum{\text{Individual Mask Areas}}}{\text{Area of Union of All Masks}}
 $$
 
@@ -51,18 +59,15 @@ Our 256 array length limit causes certain masks to be cropped out if an image ha
 
 ## Training setup
 
-The reported 5-modality model is trained jointly from scratch. All encoder and decoder parameters are initialized together, and SAM is treated as an additional masked prediction target within the same multimodal framework.
+The reported 5-modality model is trained jointly from scratch, using a lazy aligned dataloader with SAM treated as an additional masked prediction target within the same multimodal framework.
 
-## Dataset structure
-
-- 50,000 training scenes.
-- 5,000 validation scenes.
-- 10 augmentations per scene.
-- One aligned file per modality per sample.
-
-
-
-
-1. A figure of the labeling/tokenization pipeline.
-2. A compact diagram of the architecture.
-3. A short explanation of padding, truncation, and sequence length choices.
+| Config |  Value |
+| --- | --- |
+| Total Tokens | 5B |
+| Warmup Tokens | 500M |
+| Optimizer | AdamW |
+| Optimizer Betas | [0.9, 0.95] |
+| Optimizer Weight Decay | 0.5 |
+| Max - Min LR | 0.0006 - 0.000001 |
+| Gradient Clipping | 1.0 |
+| Precision | `bf16` |
