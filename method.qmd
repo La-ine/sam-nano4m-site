@@ -42,9 +42,7 @@ The reported 5-modality model is trained jointly from scratch. All encoder and d
 - 10 augmentations per scene.
 - One aligned file per modality per sample.
 
-
-
-
-1. A figure of the labeling/tokenization pipeline.
-2. A compact diagram of the architecture.
-3. A short explanation of padding, truncation, and sequence length choices.
+::: {.callout-note}
+## Dataset Access
+The full dataset used in this project is available on [Google Drive](https://drive.google.com/drive/folders/1LFaKm2GAzhHO01BgCajg3EJO_YjXfdnX){target="_blank"}.
+:::

@@ -1,19 +1,5 @@
 [
   {
-    "objectID": "report.html",
-    "href": "report.html",
-    "title": "Report",
-    "section": "",
-    "text": "After finalizing our project “SAM x Nano4M”, we wanted to highlight our work by creating this simple website and showcase our findings and experiments.\nYou can find the final report here\nDownload the final report \nThanks for reading us :)"
-  },
-  {
-    "objectID": "report.html#what-this-site-is-for",
-    "href": "report.html#what-this-site-is-for",
-    "title": "Report",
-    "section": "",
-    "text": "After finalizing our project “SAM x Nano4M”, we wanted to highlight our work by creating this simple website and showcase our findings and experiments.\nYou can find the final report here\nDownload the final report \nThanks for reading us :)"
-  },
-  {
     "objectID": "results.html",
     "href": "results.html",
     "title": "Results",
@@ -81,7 +67,7 @@
     "href": "method.html#dataset-structure",
     "title": "Method",
     "section": "Dataset structure",
-    "text": "Dataset structure\n\n50,000 training scenes.\n5,000 validation scenes.\n10 augmentations per scene.\nOne aligned file per modality per sample.\n\n\nA figure of the labeling/tokenization pipeline.\nA compact diagram of the architecture.\nA short explanation of padding, truncation, and sequence length choices."
+    "text": "Dataset structure\n\n50,000 training scenes.\n5,000 validation scenes.\n10 augmentations per scene.\nOne aligned file per modality per sample.\n\n\n\n\n\n\n\nNoteDataset Access\n\n\n\nThe full dataset used in this project is available on Google Drive."
   },
   {
     "objectID": "index.html",
@@ -110,5 +96,19 @@
     "title": "Overview",
     "section": "What this website shows",
     "text": "What this website shows\nThis site complements the report with a shorter narrative, result snapshots, and a clearer explanation of what the extension adds to nano4M. It is designed to be self-contained, so a reader can understand the high-level idea without opening the PDF first."
+  },
+  {
+    "objectID": "report.html",
+    "href": "report.html",
+    "title": "Report",
+    "section": "",
+    "text": "After finalizing our project “SAM x Nano4M”, we wanted to highlight our work by creating this simple website and showcase our findings and experiments.\nYou can find the final report here\nDownload the final report \nThanks for reading us :)"
+  },
+  {
+    "objectID": "report.html#what-this-site-is-for",
+    "href": "report.html#what-this-site-is-for",
+    "title": "Report",
+    "section": "",
+    "text": "After finalizing our project “SAM x Nano4M”, we wanted to highlight our work by creating this simple website and showcase our findings and experiments.\nYou can find the final report here\nDownload the final report \nThanks for reading us :)"
   }
 ]
