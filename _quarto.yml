@@ -16,7 +16,7 @@ website:
         text: Report
     right:
       - icon: github
-        href: https://github.com/ldiongue/sam-nano4m-site
+        href: https://github.com/La-ine/sam-nano4m-site
   page-footer:
     left: "COM-304 Final Project — Laïne Diongue, Nicola Rauseo, Shabnam Tajik"
     right: "Built with Quarto for GitHub Pages"
