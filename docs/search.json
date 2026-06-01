@@ -46,28 +46,21 @@
     "href": "method.html",
     "title": "Method",
     "section": "",
-    "text": "The project extends multiCLEVR with SAM-derived instance segmentation tokens. Each RGB scene is pseudo-labeled with SAM 2.1, filtered for stable masks, converted to normalized mask crops, and then tokenized with the pretrained 4M SAM tokenizer."
+    "text": "Extending the model with segmentation instances instances requires an accurately segmented and tokenized dataset aligned with the already present modalities. For this purpose, we extend the multiCLEVR dataset from EPFL’s COM-304 course, which is composed of 50’000 train and 5’000 validation images, with 10 augmentation each."
   },
   {
-    "objectID": "method.html#pipeline",
-    "href": "method.html#pipeline",
+    "objectID": "method.html#dataset",
+    "href": "method.html#dataset",
     "title": "Method",
     "section": "",
-    "text": "The project extends multiCLEVR with SAM-derived instance segmentation tokens. Each RGB scene is pseudo-labeled with SAM 2.1, filtered for stable masks, converted to normalized mask crops, and then tokenized with the pretrained 4M SAM tokenizer."
+    "text": "Extending the model with segmentation instances instances requires an accurately segmented and tokenized dataset aligned with the already present modalities. For this purpose, we extend the multiCLEVR dataset from EPFL’s COM-304 course, which is composed of 50’000 train and 5’000 validation images, with 10 augmentation each."
   },
   {
-    "objectID": "method.html#tokenization",
-    "href": "method.html#tokenization",
+    "objectID": "method.html#labeling-tokenization",
+    "href": "method.html#labeling-tokenization",
     "title": "Method",
-    "section": "Tokenization",
-    "text": "Tokenization\nEach segmentation instance is represented with coordinates, bounding-box information, and mask tokens. To avoid collisions with the vocabularies used by the other modalities, SAM token IDs are stored in a dedicated offset range.\n\nFIgure: Tokenization pipeline for train sample 20"
-  },
-  {
-    "objectID": "method.html#labeling",
-    "href": "method.html#labeling",
-    "title": "Method",
-    "section": "Labeling",
-    "text": "Labeling\nExtending the model with segmentation instances instances requires an accurately segmented and tokenized dataset aligned with the already present modalities. For this purpose, we extend the multiCLEVR dataset from EPFL’s COM-304 course, which is composed of 50’000 train and 5’000 validation images, with 10 augmentation each.\nTo compute our modality tokens, we pseudo-labeled the RGB dataset using Meta Research’s SAM 2.1, extracting instance masks, and subsequently tokenizing them using the pre-trained 4M model tokenize.\n\nFigure: Examples of tokenized masks. First row: original cropped RGB image. Second row: SAMv2.1 Small AMG masked image. Third row, tokenized & detokenized mask\n\nFigure: Number of instance masks per image"
+    "section": "Labeling & Tokenization",
+    "text": "Labeling & Tokenization\nThe RGB dataset is pseudolabeled with SAM v2.1 Small, filtered for stable masks, and normalized to 64x64 size using ROI Align to better conserve the complex edges. Each mask is then processed by the pre-trained 4M SAM instance tokenizer (1k - 64x64), resulting in 16 (4x4, flattened) tokens per mask.\nThe resulting representation for each instance segmentation is 22 tokens: 2 coordinates tokens, 4 bounding boxes tokens in XYXY format, and 16 tokens for the mask.\nAn offset is added to each of the coordinates (6 tokens total) to ensure that the logit computations does not conflict with each other, thus resulting in clearer differentiation between the different data type. Furthermore, the tokens are padded with the 2561 token to reach a 256 length.\nThe final codebook is thus 2562, and each mask is as follow:\n\n\n\n\n\n\n\n\n\n\n\n\n\nX COORD\nY COORD\nX MIN\nY MIN\nX MAX\nY MAX\n\n\n\n\nCodebook\n1024-1280\n1280-1536\n1536-1792\n2048-2304\n2304-2560\n0-1024\n\n\n\n\nFigure: Tokenization pipeline for train sample 20\n\nMask quality\nWe observe that the reconstructed mask tend to have unprecise edges and larger uncovered areas cause by the loss of information during the downsizing to a smaller dimensionality space during tokenization. This is particularly accentuated for larger masks. Furthermore, some artifacts from from shadows or faces of the polygons are tokenized, leading to more noisy data.\n\nFigure: Examples of tokenized masks. First row: original cropped RGB image. Second row: SAMv2.1 Small AMG masked image. Third row: Our tokenized & detokenized mask\nObserving the coverage ratio (\\(\\text{Coverage Ratio} = \\frac{\\text{Area of Union of All Masks}}{\\text{Total Image Area}}\\), low is worse) and the redundancy index (\\(\\text{Redundancy index} = \\frac{\\sum{\\text{Individual Mask Areas}}}{\\text{Area of Union of All Masks}}\\), high is worse), we obtain decent results, showing that the instance masks generally cover most of the image and there is relatively little overlap between them.\nType | Split | AVG COVERAGE RATE | CR &lt; 0.92 (%) | AVG REDUNDANCY INDEX | RI &gt; 1.05 (%) |\nTokenized Mask | Train | \\(0.964 \\pm 0.056\\) | \\(2.166\\) | \\(1.022 \\pm 0.016\\) | \\(3.834\\) |\nTokenized Mask | Validation | \\(0.965 \\pm 0.051\\) | \\(1.980\\) | \\(1.021 \\pm 0.015\\) | \\(3.260\\) |\nAMG Mask | Train (5’000 subset) | \\(0.983 \\pm 0.009\\) | \\(0.240\\) | \\(1.003 \\pm 0.011\\) | \\(1.520\\) |\nOur 256 array length limit causes certain masks to be cropped out if an image has more or equal 11 instances (244 tokens). In the violin plot below, we observe how around 1.5-2% exceed this limits, losing at least a mask.\n\nFigure: Number of instance masks per image"
   },
   {
     "objectID": "method.html#training-setup",

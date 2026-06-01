@@ -33,7 +33,7 @@ The most meaningful FID for the model itself is the comparison between **decoded
 
 | Modality | Validation CE | Comment |
 |---|---:|---|
-loss |  3.26 |
+| loss |  3.26 |
 | scene\_desc | 0.29 | Low-entropy text target |
 | tok\_sam@256 | 1.63 | Competitive among visual modalities |
 | tok\_normal@256 | 4.13 | Harder structured visual prediction |
