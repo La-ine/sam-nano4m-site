@@ -88,14 +88,14 @@ While cross modality chained generations does not have a significant increase wh
 Here are qualitative examples of chain reconstruction and generation produced by our model.
 
 ::: {layout-ncol=3}
-![Normal -> SAM -> RGB](images/chain_normal_sam_rgb_100.png){group="results"}
-![Scene desc -> SAM -> RGB](images/chain_desc_sam_rgb_100.png){group="results"}
-![Scene desc -> Depth -> SAM -> RGB](images/chain_desc_depth_sam_rgb.png_100.png){group="results"}
-![Scene desc -> Normal -> SAM -> RGB](images/chain_desc_normal_sam_rgb.png_100.png){group="results"}
-![Scene desc -> SAM -> Depth -> RGB](images/chain_desc_sam_depth_rgb.png_100.png){group="results"}
-![Scene desc -> SAM -> Normal -> RGB](images/chain_desc_sam_normal_rgb.png_100.png){group="results"}
-![Scene desc -> SAM -> Depth -> Normal -> RGB](images/chain_desc_sam_depth_normal_rgb.png_100.png){group="results"}
-![Scene desc -> SAM -> Normal -> depth -> RGB](images/chain_desc_sam_normal_depth_rgb.png_100.png){group="results"}
+![Normal -> SAM -> RGB](images/chain_normal_sam_rgb_100.png){.lightbox group="results" width=100%}
+![Scene desc -> SAM -> RGB](images/chain_desc_sam_rgb_100.png){.lightbox group="results" width=100%}
+![Scene desc -> Depth -> SAM -> RGB](images/chain_desc_depth_sam_rgb.png_100.png){.lightbox group="results" width=100%}
+![Scene desc -> Normal -> SAM -> RGB](images/chain_desc_normal_sam_rgb.png_100.png){.lightbox group="results" width=100%}
+![Scene desc -> SAM -> Depth -> RGB](images/chain_desc_sam_depth_rgb.png_100.png){.lightbox group="results" width=100%}
+![Scene desc -> SAM -> Normal -> RGB](images/chain_desc_sam_normal_rgb.png_100.png){.lightbox group="results" width=100%}
+![Scene desc -> SAM -> Depth -> Normal -> RGB](images/chain_desc_sam_depth_normal_rgb.png_100.png){.lightbox group="results" width=100%}
+![Scene desc -> SAM -> Normal -> depth -> RGB](images/chain_desc_sam_normal_depth_rgb.png_100.png){.lightbox group="results" width=100%}
 :::
 
 
