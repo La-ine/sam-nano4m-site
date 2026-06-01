@@ -299,12 +299,12 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#quantitative-summary" id="toc-quantitative-summary" class="nav-link active" data-scroll-target="#quantitative-summary">Quantitative summary</a>
+  <li><a href="#modality-losses" id="toc-modality-losses" class="nav-link active" data-scroll-target="#modality-losses">Modality losses</a></li>
+  <li><a href="#quantitative-summary" id="toc-quantitative-summary" class="nav-link" data-scroll-target="#quantitative-summary">Quantitative summary</a>
   <ul class="collapse">
   <li><a href="#segmentation-quality" id="toc-segmentation-quality" class="nav-link" data-scroll-target="#segmentation-quality">Segmentation quality</a></li>
   <li><a href="#fid" id="toc-fid" class="nav-link" data-scroll-target="#fid">FID</a></li>
   </ul></li>
-  <li><a href="#modality-losses" id="toc-modality-losses" class="nav-link" data-scroll-target="#modality-losses">Modality losses</a></li>
   <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation">Interpretation</a></li>
   </ul>
 </nav>
@@ -332,11 +332,66 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="modality-losses" class="level2">
+<h2 class="anchored" data-anchor-id="modality-losses">Modality losses</h2>
+<p>The model has been trained for around <strong>5 hours</strong> on 2 NVIDIA L40S GPUs.</p>
+<p>The final validation loss of the model is as follow:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Modality</th>
+<th style="text-align: right;">Validation CE</th>
+<th>Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>loss</td>
+<td style="text-align: right;">3.26</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>scene_desc</td>
+<td style="text-align: right;">0.29</td>
+<td>Low-entropy text target</td>
+</tr>
+<tr class="odd">
+<td>tok_sam@256</td>
+<td style="text-align: right;">1.63</td>
+<td>Competitive among visual modalities</td>
+</tr>
+<tr class="even">
+<td>tok_normal@256</td>
+<td style="text-align: right;">4.13</td>
+<td>Harder structured visual prediction</td>
+</tr>
+<tr class="odd">
+<td>tok_depth@256</td>
+<td style="text-align: right;">4.27</td>
+<td>Harder structured visual prediction</td>
+</tr>
+<tr class="even">
+<td>tok_rgb@256</td>
+<td style="text-align: right;">5.98</td>
+<td>Highest complexity among targets</td>
+</tr>
+</tbody>
+</table>
+<p>We observe a relative low loss for the SAM modality, caused by the the high frequency of highly predictable padding tokens required to reach the fixed 256-token length, which drastically lowers the overall entropy of the prediction task compared to dense visual modalities like RGB.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/eval_loss.png" class="img-fluid figure-img"></p>
+<figcaption>Eval loss</figcaption>
+</figure>
+</div>
+<p><img src="images/training_loss.png" class="img-fluid" alt="Training loss">{fig-alt=“Training loss” width=“100%”)</p>
+</section>
 <section id="quantitative-summary" class="level2">
 <h2 class="anchored" data-anchor-id="quantitative-summary">Quantitative summary</h2>
 <p>The final project evaluation includes both segmentation overlap metrics and image-distribution metrics.</p>
 <section id="segmentation-quality" class="level3">
 <h3 class="anchored" data-anchor-id="segmentation-quality">Segmentation quality</h3>
+<p>We scored <code>RGB -&gt; SAM</code> generations using <strong>mean Intersection over Union</strong>.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 30%">
@@ -420,50 +475,6 @@ ul.task-list li input[type="checkbox"] {
 </table>
 <p>The most meaningful FID for the model itself is the comparison between <strong>decoded ground-truth tokens and decoded predictions</strong>, because it partially factors out reconstruction loss caused by the tokenizer. Even under that fairer comparison, the FID remains high, so the generated outputs are still noticeably worse than the target distribution.</p>
 </section>
-</section>
-<section id="modality-losses" class="level2">
-<h2 class="anchored" data-anchor-id="modality-losses">Modality losses</h2>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Modality</th>
-<th style="text-align: right;">Validation CE</th>
-<th>Comment</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>loss</td>
-<td style="text-align: right;">3.26</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>scene_desc</td>
-<td style="text-align: right;">0.29</td>
-<td>Low-entropy text target</td>
-</tr>
-<tr class="odd">
-<td>tok_sam@256</td>
-<td style="text-align: right;">1.63</td>
-<td>Competitive among visual modalities</td>
-</tr>
-<tr class="even">
-<td>tok_normal@256</td>
-<td style="text-align: right;">4.13</td>
-<td>Harder structured visual prediction</td>
-</tr>
-<tr class="odd">
-<td>tok_depth@256</td>
-<td style="text-align: right;">4.27</td>
-<td>Harder structured visual prediction</td>
-</tr>
-<tr class="even">
-<td>tok_rgb@256</td>
-<td style="text-align: right;">5.98</td>
-<td>Highest complexity among targets</td>
-</tr>
-</tbody>
-</table>
 </section>
 <section id="interpretation" class="level2">
 <h2 class="anchored" data-anchor-id="interpretation">Interpretation</h2>

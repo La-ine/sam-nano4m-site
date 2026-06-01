@@ -391,10 +391,30 @@ window.Quarto = {
 <th>Y MIN</th>
 <th>X MAX</th>
 <th>Y MAX</th>
-<th>INSTANCE MASK (16 TOKENS)</th>
+<th>Mask</th>
 </tr>
 </thead>
 <tbody>
+<tr class="odd">
+<td>Tokens</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>16</td>
+</tr>
+<tr class="even">
+<td>Offset</td>
+<td>1024</td>
+<td>1280</td>
+<td>1536</td>
+<td>1792</td>
+<td>2048</td>
+<td>2304</td>
+<td>0</td>
+</tr>
 <tr class="odd">
 <td>Codebook</td>
 <td>1024-1280</td>
@@ -407,14 +427,27 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
-<p><img src="images/tokenizer_pipeline.png" class="img-fluid" style="width:100.0%" alt="Tokenization pipeline for train sample 20"></p>
-<p>Figure: Tokenization pipeline for train sample 20</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/tokenizer_pipeline.png" class="img-fluid figure-img" style="width:100.0%" alt="Tokenization pipeline for train sample 20"></p>
+<figcaption>Tokenization pipeline for train sample 20</figcaption>
+</figure>
+</div>
+<p>Labeling and Tokenization took around 25 hours on 2 NVIDIA L40s GPUs.</p>
 <section id="mask-quality" class="level3">
 <h3 class="anchored" data-anchor-id="mask-quality">Mask quality</h3>
 <p>We observe that the reconstructed mask tend to have unprecise edges and larger uncovered areas cause by the loss of information during the downsizing to a smaller dimensionality space during tokenization. This is particularly accentuated for larger masks. Furthermore, some artifacts from from shadows or faces of the polygons are tokenized, leading to more noisy data.</p>
-<p><img src="images/labeling.png" class="img-fluid" style="width:100.0%" alt="Examples of tokenized masks"></p>
-<p>Figure: Examples of tokenized masks. First row: original cropped RGB image. Second row: SAMv2.1 Small AMG masked image. Third row: Our tokenized &amp; detokenized mask</p>
-<p>Observing the coverage ratio (<span class="math inline">\(\text{Coverage Ratio} = \frac{\text{Area of Union of All Masks}}{\text{Total Image Area}}\)</span>, low is worse) and the redundancy index (<span class="math inline">\(\text{Redundancy index} = \frac{\sum{\text{Individual Mask Areas}}}{\text{Area of Union of All Masks}}\)</span>, high is worse), we obtain decent results, showing that the instance masks generally cover most of the image and there is relatively little overlap between them.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/labeling.png" class="img-fluid figure-img" style="width:100.0%" alt="Examples of tokenized masks"></p>
+<figcaption>Examples of tokenized masks. First row: original cropped RGB image. Second row: SAMv2.1 Small AMG masked image. Third row: Our tokenized &amp; detokenized mask</figcaption>
+</figure>
+</div>
+<p>Observing the coverage ratio (<span class="math inline">\(1.0\)</span> ideal, low is worse) and the redundancy index (<span class="math inline">\(1.0\)</span> ideal, high is worse), we obtain decent results, showing that the instance masks generally cover most of the image and there is relatively little overlap between them.</p>
+<p><span class="math display">\[
+\text{Coverage Ratio} = \frac{\text{Area of Union of All Masks}}{\text{Total Image Area}} \\
+\text{Redundancy index} = \frac{\sum{\text{Individual Mask Areas}}}{\text{Area of Union of All Masks}}
+\]</span></p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 16%">
@@ -462,8 +495,12 @@ window.Quarto = {
 </tbody>
 </table>
 <p>Our 256 array length limit causes certain masks to be cropped out if an image has more or equal 11 instances (244 tokens). In the violin plot below, we observe how around 1.5-2% exceed this limits, losing at least a mask.</p>
-<p><img src="images/mask_ratio.png" class="img-fluid" style="width:100.0%" alt="Mask_ratio"></p>
-<p>Figure: Number of instance masks per image</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/mask_ratio.png" class="img-fluid figure-img" style="width:100.0%" alt="Mask_ratio"></p>
+<figcaption>Number of instance masks per image</figcaption>
+</figure>
+</div>
 </section>
 </section>
 <section id="training-setup" class="level2">

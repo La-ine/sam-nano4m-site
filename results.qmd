@@ -2,11 +2,35 @@
 title: "Results"
 ---
 
+
+## Modality losses
+
+The model has been trained for around **5 hours** on 2 NVIDIA L40S GPUs.
+
+The final validation loss of the model is as follow:
+
+| Modality | Validation CE | Comment |
+|---|---:|---|
+| loss |  3.26 |
+| scene\_desc | 0.29 | Low-entropy text target |
+| tok\_sam@256 | 1.63 | Competitive among visual modalities |
+| tok\_normal@256 | 4.13 | Harder structured visual prediction |
+| tok\_depth@256 | 4.27 | Harder structured visual prediction |
+| tok\_rgb@256 | 5.98 | Highest complexity among targets |
+
+We observe a relative low loss for the SAM modality, caused by the the high frequency of highly predictable padding tokens required to reach the fixed 256-token length, which drastically lowers the overall entropy of the prediction task compared to dense visual modalities like RGB.
+
+![Eval loss](images/eval_loss.png)
+
+![Training loss](images/training_loss.png){fig-alt="Training loss" width="100%")
+
 ## Quantitative summary
 
 The final project evaluation includes both segmentation overlap metrics and image-distribution metrics.
 
 ### Segmentation quality
+
+We scored `RGB -> SAM` generations using **mean Intersection over Union**.
 
 | Metric | Value | Notes |
 |---|---:|---|
@@ -28,17 +52,6 @@ These IoU numbers show that the model often captures the coarse object layout re
 | Raw GT vs predictions (in-memory Inception) | 79.017 | Strong overall gap in image distribution |
 
 The most meaningful FID for the model itself is the comparison between **decoded ground-truth tokens and decoded predictions**, because it partially factors out reconstruction loss caused by the tokenizer. Even under that fairer comparison, the FID remains high, so the generated outputs are still noticeably worse than the target distribution.
-
-## Modality losses
-
-| Modality | Validation CE | Comment |
-|---|---:|---|
-| loss |  3.26 |
-| scene\_desc | 0.29 | Low-entropy text target |
-| tok\_sam@256 | 1.63 | Competitive among visual modalities |
-| tok\_normal@256 | 4.13 | Harder structured visual prediction |
-| tok\_depth@256 | 4.27 | Harder structured visual prediction |
-| tok\_rgb@256 | 5.98 | Highest complexity among targets |
 
 
 ## Interpretation

@@ -16,23 +16,28 @@ An offset is added to each of the coordinates (6 tokens total) to ensure that th
 
 The final codebook is thus `2562`, and each mask is as follow:
 
-| | X COORD | Y COORD | X MIN | Y MIN | X MAX | Y MAX | INSTANCE MASK (16 TOKENS) |
+| | X COORD | Y COORD | X MIN | Y MIN | X MAX | Y MAX |  Mask |
 |---|---|---|---|---|---|---|---|
+| Tokens | 1 | 1 | 1 | 1 | 1 | 1 | 16 |
+| Offset | 1024 | 1280 | 1536 | 1792 | 2048 | 2304 | 0 |
 | Codebook | 1024-1280 | 1280-1536 | 1536-1792 | 1792-2048 | 2048-2304 | 2304-2560 | 0-1024 |
 
-![](images/tokenizer_pipeline.png){fig-alt="Tokenization pipeline for train sample 20" width="100%"}
+![Tokenization pipeline for train sample 20](images/tokenizer_pipeline.png){fig-alt="Tokenization pipeline for train sample 20" width="100%"}
 
-Figure: Tokenization pipeline for train sample 20
+Labeling and Tokenization took around 25 hours on 2 NVIDIA L40s GPUs.
 
 ### Mask quality
 
 We observe that the reconstructed mask tend to have unprecise edges and larger uncovered areas cause by the loss of information during the downsizing to a smaller dimensionality space during tokenization. This is particularly accentuated for larger masks. Furthermore, some artifacts from from shadows or faces of the polygons are tokenized, leading to more noisy data.
 
-![](images/labeling.png){fig-alt="Examples of tokenized masks" width="100%"}
+![Examples of tokenized masks. First row: original cropped RGB image. Second row: SAMv2.1 Small AMG masked image. Third row: Our tokenized & detokenized mask](images/labeling.png){fig-alt="Examples of tokenized masks" width="100%"}
 
-Figure: Examples of tokenized masks. First row: original cropped RGB image. Second row: SAMv2.1 Small AMG masked image. Third row: Our tokenized & detokenized mask
+Observing the coverage ratio ($1.0$ ideal, low is worse) and the redundancy index ($1.0$ ideal, high is worse), we obtain decent results, showing that the instance masks generally cover most of the image and there is relatively little overlap between them.
 
-Observing the coverage ratio ($\text{Coverage Ratio} = \frac{\text{Area of Union of All Masks}}{\text{Total Image Area}}$, low is worse) and the redundancy index ($\text{Redundancy index} = \frac{\sum{\text{Individual Mask Areas}}}{\text{Area of Union of All Masks}}$, high is worse), we obtain decent results, showing that the instance masks generally cover most of the image and there is relatively little overlap between them.
+$$
+\text{Coverage Ratio} = \frac{\text{Area of Union of All Masks}}{\text{Total Image Area}} \\
+\text{Redundancy index} = \frac{\sum{\text{Individual Mask Areas}}}{\text{Area of Union of All Masks}}
+$$
 
 | Type | Split | AVG COVERAGE RATE | CR < 0.92 (%) | AVG REDUNDANCY INDEX | RI > 1.05 (%) |
 |---|---|---|---|---|---|
@@ -42,12 +47,7 @@ Observing the coverage ratio ($\text{Coverage Ratio} = \frac{\text{Area of Union
 
 Our 256 array length limit causes certain masks to be cropped out if an image has more or equal 11 instances (244 tokens). In the violin plot below, we observe how around 1.5-2% exceed this limits, losing at least a mask.
 
-![](images/mask_ratio.png){fig-alt="Mask_ratio" width="100%"}
-
-Figure: Number of instance masks per image
-
-
-
+![Number of instance masks per image](images/mask_ratio.png){fig-alt="Mask_ratio" width="100%"}
 
 ## Training setup
 
