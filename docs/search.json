@@ -32,7 +32,7 @@
     "href": "results.html#modality-losses",
     "title": "Results",
     "section": "Modality losses",
-    "text": "Modality losses\n\n\n\nModality\nValidation CE\nComment\n\n\n\n\nscene_desc\n0.30\nLow-entropy text target\n\n\ntok_sam@256\n1.65\nCompetitive among visual modalities\n\n\ntok_normal@256\n4.12\nHarder structured visual prediction\n\n\ntok_depth@256\n4.26\nHarder structured visual prediction\n\n\ntok_rgb@256\n5.93\nHighest complexity among targets"
+    "text": "Modality losses\n\n\n\nModality\nValidation CE\nComment\n\n\n\n\nloss\n3.26\n\n\n\nscene_desc\n0.29\nLow-entropy text target\n\n\ntok_sam@256\n1.63\nCompetitive among visual modalities\n\n\ntok_normal@256\n4.13\nHarder structured visual prediction\n\n\ntok_depth@256\n4.27\nHarder structured visual prediction\n\n\ntok_rgb@256\n5.98\nHighest complexity among targets"
   },
   {
     "objectID": "results.html#interpretation",
