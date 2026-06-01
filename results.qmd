@@ -2,11 +2,35 @@
 title: "Results"
 ---
 
+
+## Modality losses
+
+The model has been trained for around **5 hours** on 2 NVIDIA L40S GPUs.
+
+The final validation loss of the model is as follow:
+
+| Modality | Validation CE | Comment |
+|---|---:|---|
+| loss |  3.26 |
+| scene\_desc | 0.29 | Low-entropy text target |
+| tok\_sam@256 | 1.63 | Competitive among visual modalities |
+| tok\_normal@256 | 4.13 | Harder structured visual prediction |
+| tok\_depth@256 | 4.27 | Harder structured visual prediction |
+| tok\_rgb@256 | 5.98 | Highest complexity among targets |
+
+We observe a relative low loss for the SAM modality, caused by the the high frequency of highly predictable padding tokens required to reach the fixed 256-token length, which drastically lowers the overall entropy of the prediction task compared to dense visual modalities like RGB.
+
+![Eval loss](images/eval_loss.png){fig-alt="Eval loss" width="100%"}
+
+![Training loss](images/training_loss.png){fig-alt="Training loss" width="100%"}
+
 ## Quantitative summary
 
 The final project evaluation includes both segmentation overlap metrics and image-distribution metrics.
 
 ### Segmentation quality
+
+We scored `RGB -> SAM` generations using **mean Intersection over Union**.
 
 | Metric | Value | Notes |
 |---|---:|---|
@@ -17,6 +41,11 @@ The final project evaluation includes both segmentation overlap metrics and imag
 | Max IoU | 1.000 | Best cases are perfect |
 
 These IoU numbers show that the model often captures the coarse object layout reasonably well on synthetic CLEVR scenes. At the same time, the relatively large standard deviation and low minimum IoU indicate that performance is uneven across examples, with some masks reconstructed much worse than others.
+
+
+A degradation in mask generation quality is observable for objects in close proximity or within images containing a large number of them. While better results are visible for low-density scenes with fewer, well-separated instances, the model clearly struggles with high occlusion and complex spatial overlaps.
+
+![RGB to SAM generations (RGB from the original PNGs, not the RGB tokens)](images/rgb_to_sam.png)
 
 ### FID
 
@@ -29,22 +58,33 @@ These IoU numbers show that the model often captures the coarse object layout re
 
 The most meaningful FID for the model itself is the comparison between **decoded ground-truth tokens and decoded predictions**, because it partially factors out reconstruction loss caused by the tokenizer. Even under that fairer comparison, the FID remains high, so the generated outputs are still noticeably worse than the target distribution.
 
-## Modality losses
+SAM tokens obtain a higher FID direct chaining (*modality -> RGB*) result compared to geometric modalities.
 
-| Modality | Validation CE | Comment |
-|---|---:|---|
-| scene\_desc | 0.30 | Low-entropy text target |
-| tok\_sam@256 | 1.65 | Competitive among visual modalities |
-| tok\_normal@256 | 4.12 | Harder structured visual prediction |
-| tok\_depth@256 | 4.26 | Harder structured visual prediction |
-| tok\_rgb@256 | 5.93 | Highest complexity among targets |
+| | FID (Image Gen) |
+|--- | --- |
+| Normal -> RGB | 38.279 |
+| Depth -> RGB | 42.073 |
+| SAM -> RGB | 53.863 |
+| Scene description -> RGB | 61.638 |
+
+
+While cross modality chained generations does not have a significant increase when SAM is used as a middle-modality compared to normal and depth.
+
+| Generation Chain |  FID |
+| --- | --- |
+| Text → Normal → RGB | 39.898 |
+| Text → SAM → RGB |  40.189 |
+| Text → Depth → SAM → RGB | 38.785 |
+| Text → Normal → SAM → RGB | 40.213 |
+| Text → SAM → Normal → RGB | 40.315 |
+| Normal → SAM → RGB | 36.184 |
+| Depth → SAM → RGB | 37.430 |
+| SAM → Normal → RGB | 39.029 |
 
 
 ## Interpretation
 
-![](images/quantitative_results1.png){fig-alt="Comparison of rgb image, ground truth for SAM and generated SAM masks" width="60%"}
-
-Figure: Examples of generated masks. First row: original cropped RGB image.  Second row: SAMv2.1 Small AMG masked image. Third row, model-generated SAM masks
+![Examples of generated masks. First row: original cropped RGB image.  Second row: SAMv2.1 Small AMG masked image. Third row, model-generated SAM masks](images/quantitative_results1.png){fig-alt="Comparison of rgb image, ground truth for SAM and generated SAM masks" width="100%"}
 
 
 The quantitative picture is mixed. On one hand, IoU and mIoU suggest that the model often recovers useful segmentation structure; on the other hand, FID and the visual-token losses show that the generated outputs are still far from high-quality image synthesis.

@@ -76,6 +76,35 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -299,11 +328,12 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#pipeline" id="toc-pipeline" class="nav-link active" data-scroll-target="#pipeline">Pipeline</a></li>
-  <li><a href="#tokenization" id="toc-tokenization" class="nav-link" data-scroll-target="#tokenization">Tokenization</a></li>
-  <li><a href="#labeling" id="toc-labeling" class="nav-link" data-scroll-target="#labeling">Labeling</a></li>
+  <li><a href="#dataset" id="toc-dataset" class="nav-link active" data-scroll-target="#dataset">Dataset</a></li>
+  <li><a href="#labeling-tokenization" id="toc-labeling-tokenization" class="nav-link" data-scroll-target="#labeling-tokenization">Labeling &amp; Tokenization</a>
+  <ul class="collapse">
+  <li><a href="#mask-quality" id="toc-mask-quality" class="nav-link" data-scroll-target="#mask-quality">Mask quality</a></li>
+  </ul></li>
   <li><a href="#training-setup" id="toc-training-setup" class="nav-link" data-scroll-target="#training-setup">Training setup</a></li>
-  <li><a href="#dataset-structure" id="toc-dataset-structure" class="nav-link" data-scroll-target="#dataset-structure">Dataset structure</a></li>
   </ul>
 </nav>
     </div>
@@ -330,37 +360,11 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="pipeline" class="level2">
-<h2 class="anchored" data-anchor-id="pipeline">Pipeline</h2>
-<p>The project extends multiCLEVR with SAM-derived instance segmentation tokens. Each RGB scene is pseudo-labeled with SAM 2.1, filtered for stable masks, converted to normalized mask crops, and then tokenized with the pretrained 4M SAM tokenizer.</p>
-</section>
-<section id="tokenization" class="level2">
-<h2 class="anchored" data-anchor-id="tokenization">Tokenization</h2>
-<p>Each segmentation instance is represented with coordinates, bounding-box information, and mask tokens. To avoid collisions with the vocabularies used by the other modalities, SAM token IDs are stored in a dedicated offset range.</p>
-<p><img src="images/tokenizer_pipeline.png" class="img-fluid" style="width:60.0%" alt="Tokenization pipeline for train sample 20"></p>
-<p>FIgure: Tokenization pipeline for train sample 20</p>
-</section>
-<section id="labeling" class="level2">
-<h2 class="anchored" data-anchor-id="labeling">Labeling</h2>
-<p>Extending the model with segmentation instances instances requires an accurately segmented and tokenized dataset aligned with the already present modalities. For this purpose, we extend the multiCLEVR dataset from EPFL’s COM-304 course, which is composed of 50’000 train and 5’000 validation images, with 10 augmentation each.</p>
-<p>To compute our modality tokens, we pseudo-labeled the RGB dataset using Meta Research’s SAM 2.1, extracting instance masks, and subsequently tokenizing them using the pre-trained 4M model tokenize.</p>
-<p><img src="images/labeling.png" class="img-fluid" style="width:60.0%" alt="Examples of tokenized masks"></p>
-<p>Figure: Examples of tokenized masks. First row: original cropped RGB image. Second row: SAMv2.1 Small AMG masked image. Third row, tokenized &amp; detokenized mask</p>
-<p><img src="images/mask_ratio.png" class="img-fluid" style="width:60.0%" alt="Mask_ratio"></p>
-<p>Figure: Number of instance masks per image</p>
-</section>
-<section id="training-setup" class="level2">
-<h2 class="anchored" data-anchor-id="training-setup">Training setup</h2>
-<p>The reported 5-modality model is trained jointly from scratch. All encoder and decoder parameters are initialized together, and SAM is treated as an additional masked prediction target within the same multimodal framework.</p>
-</section>
-<section id="dataset-structure" class="level2">
-<h2 class="anchored" data-anchor-id="dataset-structure">Dataset structure</h2>
-<ul>
-<li>50,000 training scenes.</li>
-<li>5,000 validation scenes.</li>
-<li>10 augmentations per scene.</li>
-<li>One aligned file per modality per sample.</li>
-</ul>
+<section id="dataset" class="level2">
+<h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
+<p>Extending the model with segmentation instances instances requires an accurately segmented and tokenized dataset aligned with the already present modalities.</p>
+<p>For this purpose, we extend the multiCLEVR dataset from EPFL’s COM-304 course, which is composed of 50’000 train and 5’000 validation images, with 10 augmentation each, aligned with each other.</p>
+<p>The dataset images are geometrically simple and contains relatively easy shapes, thus it is particularly fit for segmentations tasks.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -374,6 +378,192 @@ ul.task-list li input[type="checkbox"] {
 <p>The full dataset used in this project is available on <a href="https://drive.google.com/drive/folders/1LFaKm2GAzhHO01BgCajg3EJO_YjXfdnX" target="_blank">Google Drive</a>.</p>
 </div>
 </div>
+</section>
+<section id="labeling-tokenization" class="level2">
+<h2 class="anchored" data-anchor-id="labeling-tokenization">Labeling &amp; Tokenization</h2>
+<p>The RGB dataset is pseudolabeled with <a href="https://github.com/facebookresearch/sam2">SAM v2.1 Small</a>, filtered for stable masks, and normalized to <code>64x64</code> size using ROI Align to better conserve the complex edges. Each mask is then processed by the pre-trained <a href="https://huggingface.co/EPFL-VILAB/4M_tokenizers_sam-instance_1k_64">4M SAM instance tokenizer (1k - 64)</a>, resulting in 16 (4x4, flattened) tokens per mask.</p>
+<p>The resulting representation for each instance segmentation is 22 tokens: 2 coordinates tokens, 4 bounding boxes tokens in XYXY format, and 16 tokens for the mask.</p>
+<p>An offset is added to each of the coordinates (6 tokens total) to ensure that the logit computations does not conflict with each other, thus resulting in clearer differentiation between the different data type. Furthermore, the tokens are padded with the <code>2561</code> token to reach a 256 length.</p>
+<p>The final codebook is thus <code>2562</code>, and each mask is as follow:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>X COORD</th>
+<th>Y COORD</th>
+<th>X MIN</th>
+<th>Y MIN</th>
+<th>X MAX</th>
+<th>Y MAX</th>
+<th>Mask</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Tokens</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>16</td>
+</tr>
+<tr class="even">
+<td>Offset</td>
+<td>1024</td>
+<td>1280</td>
+<td>1536</td>
+<td>1792</td>
+<td>2048</td>
+<td>2304</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>Codebook</td>
+<td>1024-1280</td>
+<td>1280-1536</td>
+<td>1536-1792</td>
+<td>1792-2048</td>
+<td>2048-2304</td>
+<td>2304-2560</td>
+<td>0-1024</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/tokenizer_pipeline.png" class="img-fluid figure-img" style="width:100.0%" alt="Tokenization pipeline for train sample 20"></p>
+<figcaption>Tokenization pipeline for train sample 20</figcaption>
+</figure>
+</div>
+<p>Labeling and Tokenization took around 25 hours on 2 NVIDIA L40s GPUs.</p>
+<section id="mask-quality" class="level3">
+<h3 class="anchored" data-anchor-id="mask-quality">Mask quality</h3>
+<p>We observe that the reconstructed mask tend to have unprecise edges and larger uncovered areas cause by the loss of information during the downsizing to a smaller dimensionality space during tokenization. This is particularly accentuated for larger masks. Furthermore, some artifacts from from shadows or faces of the polygons are tokenized, leading to more noisy data.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/labeling.png" class="img-fluid figure-img" style="width:100.0%" alt="Examples of tokenized masks"></p>
+<figcaption>Examples of tokenized masks. First row: original cropped RGB image. Second row: SAMv2.1 Small AMG masked image. Third row: Our tokenized &amp; detokenized mask</figcaption>
+</figure>
+</div>
+<p>Observing the coverage ratio (<span class="math inline">\(1.0\)</span> ideal, low is worse) and the redundancy index (<span class="math inline">\(1.0\)</span> ideal, high is worse), we obtain decent results, showing that the instance masks generally cover most of the image and there is relatively little overlap between them.</p>
+<p><span class="math display">\[
+\text{Coverage Ratio} = \frac{\text{Area of Union of All Masks}}{\text{Total Image Area}}
+\]</span></p>
+<p><span class="math display">\[
+\text{Redundancy index} = \frac{\sum{\text{Individual Mask Areas}}}{\text{Area of Union of All Masks}}
+\]</span></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Split</th>
+<th>AVG COVERAGE RATE</th>
+<th>CR &lt; 0.92 (%)</th>
+<th>AVG REDUNDANCY INDEX</th>
+<th>RI &gt; 1.05 (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Tokenized Mask</td>
+<td>Train</td>
+<td><span class="math inline">\(0.964 \pm 0.056\)</span></td>
+<td><span class="math inline">\(2.166\)</span></td>
+<td><span class="math inline">\(1.022 \pm 0.016\)</span></td>
+<td><span class="math inline">\(3.834\)</span></td>
+</tr>
+<tr class="even">
+<td>Tokenized Mask</td>
+<td>Validation</td>
+<td><span class="math inline">\(0.965 \pm 0.051\)</span></td>
+<td><span class="math inline">\(1.980\)</span></td>
+<td><span class="math inline">\(1.021 \pm 0.015\)</span></td>
+<td><span class="math inline">\(3.260\)</span></td>
+</tr>
+<tr class="odd">
+<td>AMG Mask</td>
+<td>Train (5’000 subset)</td>
+<td><span class="math inline">\(0.983 \pm 0.009\)</span></td>
+<td><span class="math inline">\(0.240\)</span></td>
+<td><span class="math inline">\(1.003 \pm 0.011\)</span></td>
+<td><span class="math inline">\(1.520\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Our 256 array length limit causes certain masks to be cropped out if an image has more or equal 11 instances (244 tokens). In the violin plot below, we observe how around 1.5-2% exceed this limits, losing at least a mask.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/mask_ratio.png" class="img-fluid figure-img" style="width:100.0%" alt="Mask_ratio"></p>
+<figcaption>Number of instance masks per image</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="training-setup" class="level2">
+<h2 class="anchored" data-anchor-id="training-setup">Training setup</h2>
+<p>The reported 5-modality model is trained jointly from scratch, using a lazy aligned dataloader with SAM treated as an additional masked prediction target within the same multimodal framework.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Config</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Total Tokens</td>
+<td>5B</td>
+</tr>
+<tr class="even">
+<td>Warmup Tokens</td>
+<td>500M</td>
+</tr>
+<tr class="odd">
+<td>Optimizer</td>
+<td>AdamW</td>
+</tr>
+<tr class="even">
+<td>Optimizer Betas</td>
+<td>[0.9, 0.95]</td>
+</tr>
+<tr class="odd">
+<td>Optimizer Weight Decay</td>
+<td>0.5</td>
+</tr>
+<tr class="even">
+<td>Max - Min LR</td>
+<td>0.0006 - 0.000001</td>
+</tr>
+<tr class="odd">
+<td>Gradient Clipping</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td>Precision</td>
+<td><code>bf16</code></td>
+</tr>
+</tbody>
+</table>
 
 
 </section>

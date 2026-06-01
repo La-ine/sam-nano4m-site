@@ -18,11 +18,11 @@ Modalities jointly modeled: RGB, depth, normals, text, and SAM tokens.
 Training scenes, each rendered with 10 augmentations.
 :::
 ::: {.metric-card}
-### 1.65
+### 1.63
 Validation cross-entropy for SAM tokens.
 :::
 ::: {.metric-card}
-### 3815
+### 38'147
 Training steps in the reported run.
 :::
 :::
